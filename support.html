@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spalyzer — Support</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f7;
+      color: #1d1d1f;
+      padding: 40px 20px;
+    }
+    .container { max-width: 680px; margin: 0 auto; }
+    header { text-align: center; margin-bottom: 48px; }
+    header h1 { font-size: 36px; font-weight: 700; letter-spacing: -0.5px; }
+    header h1 span { color: #3FB8E0; }
+    header p { color: #6e6e73; margin-top: 8px; font-size: 16px; }
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    h2 { font-size: 20px; font-weight: 600; margin-bottom: 12px; }
+    p { line-height: 1.65; color: #3a3a3c; font-size: 15px; }
+    ul { padding-left: 20px; margin-top: 8px; }
+    li { line-height: 1.8; color: #3a3a3c; font-size: 15px; }
+    a { color: #007aff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .contact-btn {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 12px 24px;
+      background: #1d1d1f;
+      color: white;
+      border-radius: 980px;
+      font-size: 15px;
+      font-weight: 500;
+      text-decoration: none;
+    }
+    footer { text-align: center; color: #6e6e73; font-size: 13px; margin-top: 40px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Spa<span>lyzer</span></h1>
+      <p>Support &amp; Help</p>
+    </header>
+
+    <div class="card">
+      <h2>Frequently Asked Questions</h2>
+      <ul>
+        <li><strong>How do I take a measurement?</strong> — From the home screen tap "New measurement", then choose between photographing the test reader's LCD, photographing a test strip, or entering values manually.</li>
+        <li><strong>The app doesn't recognize my values correctly.</strong> — Make sure the display or strip is well-lit, in focus, and fills the frame. Recognized values are always shown for review before saving — you can correct any value manually.</li>
+        <li><strong>How do I add a new pool chemical?</strong> — Settings → Manage products → Add. You can either photograph the label (vision-based recognition) or enter the data manually.</li>
+        <li><strong>How do I edit my pool setup?</strong> — Settings → Edit pool. Volume, indoor/outdoor, ozonator, default temperature, and unit system can all be changed at any time.</li>
+        <li><strong>I have multiple chlorine products. Which one is used for dosing?</strong> — On the products screen, mark one product per role (e.g. main chlorine, pH down) as your default. The dosing engine will use it.</li>
+        <li><strong>I get a "daily limit reached" error.</strong> — Photo analysis is rate-limited to 50 requests per device per day to prevent abuse. You can still enter values manually any time, or wait until the next day.</li>
+        <li><strong>Are the dosing recommendations safe?</strong> — Spalyzer uses safety limits and target ranges configured for outdoor swim spas with chlorine and an ozonator. The app shows warnings when measurements are outside safe ranges and never recommends doses that would exceed those limits. Always follow the manufacturer's instructions on your product label and consult a professional if values are critical.</li>
+        <li><strong>How do I change the language?</strong> — Settings → Language. Spalyzer is available in German, English, French, Spanish, Italian, and Portuguese (Brazil).</li>
+        <li><strong>How do I switch between metric and imperial units?</strong> — Settings → Edit pool → Units toggle.</li>
+        <li><strong>How do I delete all my data?</strong> — Uninstall the app — all data is local and is removed with the app.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Contact Support</h2>
+      <p>If your question isn't answered above, you found a bug, or have a feature request — reach out via email. We typically respond within 1–2 business days.</p>
+      <a class="contact-btn" href="mailto:support@klifter.com?subject=Spalyzer%20Support">Email Support</a>
+    </div>
+
+    <div class="card">
+      <h2>Privacy &amp; Legal</h2>
+      <p>
+        <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
+        <a href="terms.html">Terms of Use</a>
+      </p>
+    </div>
+
+    <footer>
+      <p>© 2026 Spalyzer · Klifter Apps · Dübendorf, Switzerland</p>
+    </footer>
+  </div>
+</body>
+</html>
