@@ -14,6 +14,25 @@
             padding: 40px 20px;
         }
         .container { max-width: 680px; margin: 0 auto; }
+        .lang-switcher {
+            display: flex; gap: 6px; justify-content: flex-end;
+            margin-bottom: 24px; flex-wrap: wrap;
+        }
+        .lang-switcher button {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.18);
+            color: rgba(255,255,255,0.85);
+            font-size: 13px; font-weight: 500;
+            padding: 6px 12px; border-radius: 980px;
+            cursor: pointer; font-family: inherit;
+        }
+        .lang-switcher button.active {
+            background: #67E8F9; color: #0A1628;
+            border-color: #67E8F9;
+        }
+        .lang-switcher button:hover:not(.active) {
+            background: rgba(255,255,255,0.12);
+        }
         h1 { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 8px; }
         .subtitle { color: #67E8F9; font-size: 14px; font-weight: 500; margin-bottom: 32px; }
         h2 { font-size: 18px; font-weight: 600; color: #fff; margin-top: 32px; margin-bottom: 12px; }
@@ -28,89 +47,200 @@
 </head>
 <body>
     <div class="container">
-        <h1>Privacy Policy</h1>
-        <div class="subtitle">Spalyzer — Pool Water Analysis</div>
+        <div class="lang-switcher" id="lang-switcher">
+            <button data-lang="de">Deutsch</button>
+            <button data-lang="en">English</button>
+            <button data-lang="es">Español</button>
+            <button data-lang="fr">Français</button>
+            <button data-lang="it">Italiano</button>
+            <button data-lang="pt">Português</button>
+        </div>
 
-        <h2>Summary</h2>
-        <p>Spalyzer does not require an account, does not collect personal information, and stores all your pool data exclusively on your device. Photos you take of your test reader display, test strips, or product labels are sent to OpenAI for image analysis only, and are not stored by us.</p>
+        <h1 id="page-title"></h1>
+        <div class="subtitle" id="page-subtitle"></div>
 
-        <h2>Introduction</h2>
-        <p>Klifter Apps ("we", "us", or "our") operates the Spalyzer mobile application. This Privacy Policy explains how we handle information when you use our app.</p>
+        <div id="sections"></div>
 
-        <h2>Information We Collect</h2>
-        <p>We do not collect personally identifiable information such as your name, email address, location, or phone number. The app works entirely without sign-up.</p>
-
-        <h2>Data Stored on Your Device</h2>
-        <p>Spalyzer stores the following data in iOS local storage on your device only:</p>
-        <ul>
-            <li>Your pool setup (name, volume, indoor/outdoor, default temperature, disinfection method, ozonator setting, unit system)</li>
-            <li>Pool chemicals you have added to your library (brand, name, active ingredient, concentration, form, role)</li>
-            <li>Your measurements (free chlorine, pH, total alkalinity, optional cyanuric acid and calcium hardness, water temperature, timestamps, optional notes)</li>
-            <li>Your language preference, onboarding completion flag, and privacy consent flag</li>
-            <li>An anonymous device identifier (random UUID) used solely to enforce per-day rate limits on photo analysis</li>
-        </ul>
-        <p>This data never leaves your device, except where explicitly described below.</p>
-
-        <h2>Photo Analysis</h2>
-        <p>When you take a photo of a digital test reader display, a test strip, or a product label, the photo is sent to our backend (a Supabase Edge Function), which forwards it to OpenAI's Vision API (model <em>gpt-4o-mini</em>) for analysis. The response — a small JSON object containing the recognized values — is returned to your device for you to confirm.</p>
-        <p><strong>Important:</strong></p>
-        <ul>
-            <li>We do not store the photo. It is held in memory only for the duration of the request.</li>
-            <li>OpenAI does not retain images submitted via their API for training, in accordance with their <a href="https://openai.com/enterprise-privacy">API data usage policy</a>.</li>
-            <li>The only thing stored on our backend is a per-day request counter keyed by the anonymous device identifier mentioned above. No image data is persisted.</li>
-            <li>You can use the app without taking photos by entering values manually — in that case nothing leaves your device.</li>
-        </ul>
-
-        <h2>Third-Party Services</h2>
-
-        <p><strong>OpenAI</strong> — Photos taken in the app are processed via OpenAI's Vision API for value recognition. See OpenAI's privacy policy: <a href="https://openai.com/policies/privacy-policy">openai.com/policies/privacy-policy</a> and their <a href="https://openai.com/enterprise-privacy">API data privacy</a> page.</p>
-
-        <p><strong>Supabase</strong> — We operate a small backend on Supabase that proxies image analysis requests and enforces per-device daily rate limits. The only data stored is the anonymous device identifier paired with a request count for the current day. See Supabase's privacy policy: <a href="https://supabase.com/privacy">supabase.com/privacy</a>.</p>
-
-        <p><strong>Apple App Store</strong> — Distribution and any in-app purchases are handled entirely by Apple. We do not have access to your payment information. See <a href="https://www.apple.com/legal/privacy/">apple.com/legal/privacy</a>.</p>
-
-        <p><strong>Sentry</strong> — When enabled in a release build, the app may send anonymous crash reports to Sentry to help us diagnose bugs. Crash reports include stack traces and device model but no personal data and no pool data. See <a href="https://sentry.io/privacy/">sentry.io/privacy</a>.</p>
-
-        <h2>What We Do Not Do</h2>
-        <ul>
-            <li>We do not show advertisements.</li>
-            <li>We do not use third-party marketing analytics or tracking SDKs.</li>
-            <li>We do not sell or share data with marketing partners.</li>
-            <li>We do not collect health, biometric, or location data.</li>
-            <li>We do not link any data to your identity.</li>
-        </ul>
-
-        <h2>Children's Privacy</h2>
-        <p>Spalyzer is intended for adults who maintain swimming pools. It is not directed at children under 13. We do not knowingly collect personal information from children.</p>
-
-        <h2>Data Security</h2>
-        <p>Pool data is stored using iOS's local storage facilities, protected by your device's security features (passcode, Face ID, encryption at rest). Network traffic between the app and our backend, and between our backend and OpenAI, is transmitted over HTTPS.</p>
-
-        <h2>Your Rights (GDPR / Swiss DSG)</h2>
-        <p>If you are located in the European Economic Area (EEA), the United Kingdom, or Switzerland, you have rights under the General Data Protection Regulation (GDPR) and the Swiss Federal Act on Data Protection (DSG):</p>
-        <ul>
-            <li><strong>Right of access</strong> — All your data is visible directly in the app.</li>
-            <li><strong>Right to rectification</strong> — You can edit pool setup, products, and measurements directly in the app.</li>
-            <li><strong>Right to erasure</strong> — Uninstall the app to delete all locally stored data.</li>
-            <li><strong>Right to data portability</strong> — Pool data is plain JSON in iOS local storage and can be exported via standard iOS tools.</li>
-            <li><strong>Right to object</strong> — You may stop using photo analysis at any time and enter values manually instead.</li>
-        </ul>
-        <p>For data processed by our third-party services (OpenAI, Supabase, Sentry), please refer to those providers' privacy policies linked above.</p>
-        <p>If you have questions about your rights or wish to exercise them, contact us at <a href="mailto:support@klifter.com">support@klifter.com</a>.</p>
-
-        <h2>International Data Transfers</h2>
-        <p>Photos sent for analysis are transmitted to OpenAI infrastructure, which may include servers in the United States. Our backend is hosted on Supabase. By using the photo analysis feature, you consent to this transfer. Manual entry keeps all data on your device.</p>
-
-        <h2>Disclaimer</h2>
-        <p>Spalyzer provides general guidance on pool water chemistry. It is not a substitute for professional advice. Always verify safety limits and consult a qualified pool professional before adding chemicals if you are unsure. See our <a href="terms.html">Terms of Use</a> for the full disclaimer.</p>
-
-        <h2>Changes to This Policy</h2>
-        <p>We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated revision date.</p>
-
-        <h2>Contact Us</h2>
-        <p>If you have any questions about this Privacy Policy, please contact us at <a href="mailto:support@klifter.com">support@klifter.com</a>.</p>
-
-        <div class="updated">Last updated: May 5, 2026</div>
+        <div class="updated" id="updated"></div>
     </div>
+
+    <script>
+        // Six-language privacy policy. Sections are an array so order
+        // stays consistent across locales and a missing translation
+        // simply falls back to English without breaking layout. Body
+        // strings are HTML (links, bold, lists) so we use innerHTML —
+        // all content is author-controlled, no user input renders here.
+        const translations = {
+            de: {
+                title: "Datenschutz-Erklärung",
+                subtitle: "Spalyzer — Pool-Wasseranalyse",
+                updated: "Letzte Aktualisierung: 5. Mai 2026",
+                sections: [
+                    { h: "Zusammenfassung", b: "<p>Spalyzer benötigt kein Benutzerkonto, sammelt keine personenbezogenen Daten und speichert deine Pool-Daten ausschließlich auf deinem Gerät. Fotos, die du von deinem Test-Reader-Display, Teststreifen oder Produkt-Etiketten machst, werden ausschließlich zur Bildanalyse an OpenAI gesendet und nicht von uns gespeichert.</p>" },
+                    { h: "Einleitung", b: "<p>Klifter Apps („wir\", „uns\") betreibt die mobile App Spalyzer. Diese Datenschutz-Erklärung erklärt, wie wir mit Informationen umgehen, wenn du unsere App nutzt.</p>" },
+                    { h: "Welche Informationen wir erheben", b: "<p>Wir erheben keine personenbezogenen Daten wie Name, E-Mail-Adresse, Standort oder Telefonnummer. Die App funktioniert vollständig ohne Anmeldung.</p>" },
+                    { h: "Auf deinem Gerät gespeicherte Daten", b: "<p>Spalyzer speichert die folgenden Daten ausschließlich im lokalen iOS-Speicher auf deinem Gerät:</p><ul><li>Dein Pool-Setup (Name, Volumen, indoor/outdoor, Standard-Temperatur, Desinfektion, Ozonator, Einheiten-System)</li><li>Pool-Chemikalien, die du in deiner Bibliothek hinzugefügt hast (Marke, Name, Wirkstoff, Konzentration, Form, Rolle)</li><li>Deine Messungen (freies Chlor, pH, Gesamtalkalinität, optional Cyanursäure und Calciumhärte, Wassertemperatur, Zeitstempel, optionale Notizen)</li><li>Deine Sprach-Einstellung, Onboarding-Status und Datenschutz-Zustimmung</li><li>Eine anonyme Geräte-ID (zufällige UUID), ausschließlich um tägliche Rate-Limits für Foto-Analysen durchzusetzen</li></ul><p>Diese Daten verlassen dein Gerät nie, außer wie unten ausdrücklich beschrieben.</p>" },
+                    { h: "Foto-Analyse", b: "<p>Wenn du ein Foto eines digitalen Test-Reader-Displays, eines Teststreifens oder eines Produkt-Etiketts machst, wird das Foto an unser Backend (eine Supabase Edge Function) gesendet, das es zur Analyse an die OpenAI Vision API (Modell <em>gpt-4o-mini</em>) weiterleitet. Die Antwort — ein kleines JSON-Objekt mit den erkannten Werten — wird zur Bestätigung an dein Gerät zurückgegeben.</p><p><strong>Wichtig:</strong></p><ul><li>Wir speichern das Foto nicht. Es wird nur für die Dauer der Anfrage im Arbeitsspeicher gehalten.</li><li>OpenAI speichert über die API übermittelte Bilder nicht für Trainingszwecke, gemäß der <a href=\"https://openai.com/enterprise-privacy\">API-Datenrichtlinie</a>.</li><li>Auf unserem Backend wird nur ein Tageszähler pro anonyme Geräte-ID gespeichert. Es werden keine Bilddaten persistiert.</li><li>Du kannst die App auch ohne Foto-Aufnahme nutzen, indem du Werte manuell eingibst — in diesem Fall verlässt nichts dein Gerät.</li></ul>" },
+                    { h: "Dienste von Drittanbietern", b: "<p><strong>OpenAI</strong> — Fotos werden zur Werterkennung über die OpenAI Vision API verarbeitet. Datenschutz-Erklärung: <a href=\"https://openai.com/policies/privacy-policy\">openai.com/policies/privacy-policy</a> und <a href=\"https://openai.com/enterprise-privacy\">API-Datenschutz</a>.</p><p><strong>Supabase</strong> — Wir betreiben ein kleines Backend bei Supabase, das Bildanalyse-Anfragen weiterleitet und tägliche Rate-Limits pro Gerät durchsetzt. Gespeichert wird nur die anonyme Geräte-ID gepaart mit einem Tageszähler. Datenschutz: <a href=\"https://supabase.com/privacy\">supabase.com/privacy</a>.</p><p><strong>Apple App Store</strong> — Vertrieb und etwaige In-App-Käufe werden vollständig von Apple abgewickelt. Wir haben keinen Zugang zu deinen Zahlungsdaten. Siehe <a href=\"https://www.apple.com/legal/privacy/\">apple.com/legal/privacy</a>.</p><p><strong>Sentry</strong> — In Release-Builds sendet die App ggf. anonyme Crash-Reports an Sentry, um Fehler zu diagnostizieren. Crash-Reports enthalten Stack-Traces und Geräte-Modell, aber keine personenbezogenen Daten und keine Pool-Daten. Siehe <a href=\"https://sentry.io/privacy/\">sentry.io/privacy</a>.</p>" },
+                    { h: "Was wir nicht tun", b: "<ul><li>Wir zeigen keine Werbung.</li><li>Wir verwenden keine Drittanbieter-Marketing-Analytics oder Tracking-SDKs.</li><li>Wir verkaufen oder teilen keine Daten mit Marketing-Partnern.</li><li>Wir erheben keine Gesundheits-, biometrischen oder Standort-Daten.</li><li>Wir verknüpfen keine Daten mit deiner Identität.</li></ul>" },
+                    { h: "Datenschutz für Kinder", b: "<p>Spalyzer richtet sich an Erwachsene, die Schwimmbäder pflegen. Die App ist nicht für Kinder unter 13 Jahren bestimmt. Wir erheben wissentlich keine personenbezogenen Daten von Kindern.</p>" },
+                    { h: "Datensicherheit", b: "<p>Pool-Daten werden in den lokalen iOS-Speicher abgelegt, geschützt durch die Sicherheitsfunktionen deines Geräts (Passcode, Face ID, Verschlüsselung im Ruhezustand). Netzwerk-Verkehr zwischen App und Backend sowie Backend und OpenAI wird über HTTPS übertragen.</p>" },
+                    { h: "Deine Rechte (DSGVO / Schweizer DSG)", b: "<p>Wenn du im Europäischen Wirtschaftsraum (EWR), im Vereinigten Königreich oder in der Schweiz wohnst, hast du Rechte nach der Datenschutz-Grundverordnung (DSGVO) und dem Schweizer Datenschutzgesetz (DSG):</p><ul><li><strong>Auskunftsrecht</strong> — Alle deine Daten sind direkt in der App einsehbar.</li><li><strong>Recht auf Berichtigung</strong> — Du kannst Pool-Setup, Produkte und Messungen direkt in der App bearbeiten.</li><li><strong>Recht auf Löschung</strong> — Deinstalliere die App, um alle lokal gespeicherten Daten zu löschen.</li><li><strong>Recht auf Datenübertragbarkeit</strong> — Pool-Daten liegen als reines JSON im lokalen iOS-Speicher und können über Standard-iOS-Tools exportiert werden.</li><li><strong>Widerspruchsrecht</strong> — Du kannst die Foto-Analyse jederzeit einstellen und Werte stattdessen manuell eingeben.</li></ul><p>Für Daten, die unsere Drittanbieter (OpenAI, Supabase, Sentry) verarbeiten, beachte deren oben verlinkte Datenschutz-Erklärungen.</p><p>Bei Fragen zu deinen Rechten oder zur Ausübung kontaktiere uns unter <a href=\"mailto:support@klifter.com\">support@klifter.com</a>.</p>" },
+                    { h: "Internationale Datenübermittlung", b: "<p>Zur Analyse gesendete Fotos werden an OpenAI-Infrastruktur übertragen, die u.a. Server in den USA umfassen kann. Unser Backend wird bei Supabase gehostet. Mit der Nutzung der Foto-Analyse stimmst du dieser Übertragung zu. Manuelle Eingabe hält alle Daten auf deinem Gerät.</p>" },
+                    { h: "Haftungsausschluss", b: "<p>Spalyzer bietet allgemeine Hinweise zur Pool-Wasserchemie. Es ist kein Ersatz für professionelle Beratung. Überprüfe immer Sicherheits-Limits und konsultiere bei Unsicherheit eine qualifizierte Pool-Fachperson, bevor du Chemikalien hinzufügst. Vollständiger Haftungsausschluss in den <a href=\"terms.html\">Nutzungsbedingungen</a>.</p>" },
+                    { h: "Änderungen dieser Erklärung", b: "<p>Wir können diese Datenschutz-Erklärung von Zeit zu Zeit aktualisieren. Änderungen werden auf dieser Seite mit aktualisiertem Revisions-Datum veröffentlicht.</p>" },
+                    { h: "Kontakt", b: "<p>Bei Fragen zu dieser Datenschutz-Erklärung kontaktiere uns unter <a href=\"mailto:support@klifter.com\">support@klifter.com</a>.</p>" }
+                ]
+            },
+            en: {
+                title: "Privacy Policy",
+                subtitle: "Spalyzer — Pool Water Analysis",
+                updated: "Last updated: May 5, 2026",
+                sections: [
+                    { h: "Summary", b: "<p>Spalyzer does not require an account, does not collect personal information, and stores all your pool data exclusively on your device. Photos you take of your test reader display, test strips, or product labels are sent to OpenAI for image analysis only, and are not stored by us.</p>" },
+                    { h: "Introduction", b: "<p>Klifter Apps (\"we\", \"us\", or \"our\") operates the Spalyzer mobile application. This Privacy Policy explains how we handle information when you use our app.</p>" },
+                    { h: "Information We Collect", b: "<p>We do not collect personally identifiable information such as your name, email address, location, or phone number. The app works entirely without sign-up.</p>" },
+                    { h: "Data Stored on Your Device", b: "<p>Spalyzer stores the following data in iOS local storage on your device only:</p><ul><li>Your pool setup (name, volume, indoor/outdoor, default temperature, disinfection method, ozonator setting, unit system)</li><li>Pool chemicals you have added to your library (brand, name, active ingredient, concentration, form, role)</li><li>Your measurements (free chlorine, pH, total alkalinity, optional cyanuric acid and calcium hardness, water temperature, timestamps, optional notes)</li><li>Your language preference, onboarding completion flag, and privacy consent flag</li><li>An anonymous device identifier (random UUID) used solely to enforce per-day rate limits on photo analysis</li></ul><p>This data never leaves your device, except where explicitly described below.</p>" },
+                    { h: "Photo Analysis", b: "<p>When you take a photo of a digital test reader display, a test strip, or a product label, the photo is sent to our backend (a Supabase Edge Function), which forwards it to OpenAI's Vision API (model <em>gpt-4o-mini</em>) for analysis. The response — a small JSON object containing the recognized values — is returned to your device for you to confirm.</p><p><strong>Important:</strong></p><ul><li>We do not store the photo. It is held in memory only for the duration of the request.</li><li>OpenAI does not retain images submitted via their API for training, in accordance with their <a href=\"https://openai.com/enterprise-privacy\">API data usage policy</a>.</li><li>The only thing stored on our backend is a per-day request counter keyed by the anonymous device identifier mentioned above. No image data is persisted.</li><li>You can use the app without taking photos by entering values manually — in that case nothing leaves your device.</li></ul>" },
+                    { h: "Third-Party Services", b: "<p><strong>OpenAI</strong> — Photos taken in the app are processed via OpenAI's Vision API for value recognition. See OpenAI's privacy policy: <a href=\"https://openai.com/policies/privacy-policy\">openai.com/policies/privacy-policy</a> and their <a href=\"https://openai.com/enterprise-privacy\">API data privacy</a> page.</p><p><strong>Supabase</strong> — We operate a small backend on Supabase that proxies image analysis requests and enforces per-device daily rate limits. The only data stored is the anonymous device identifier paired with a request count for the current day. See Supabase's privacy policy: <a href=\"https://supabase.com/privacy\">supabase.com/privacy</a>.</p><p><strong>Apple App Store</strong> — Distribution and any in-app purchases are handled entirely by Apple. We do not have access to your payment information. See <a href=\"https://www.apple.com/legal/privacy/\">apple.com/legal/privacy</a>.</p><p><strong>Sentry</strong> — When enabled in a release build, the app may send anonymous crash reports to Sentry to help us diagnose bugs. Crash reports include stack traces and device model but no personal data and no pool data. See <a href=\"https://sentry.io/privacy/\">sentry.io/privacy</a>.</p>" },
+                    { h: "What We Do Not Do", b: "<ul><li>We do not show advertisements.</li><li>We do not use third-party marketing analytics or tracking SDKs.</li><li>We do not sell or share data with marketing partners.</li><li>We do not collect health, biometric, or location data.</li><li>We do not link any data to your identity.</li></ul>" },
+                    { h: "Children's Privacy", b: "<p>Spalyzer is intended for adults who maintain swimming pools. It is not directed at children under 13. We do not knowingly collect personal information from children.</p>" },
+                    { h: "Data Security", b: "<p>Pool data is stored using iOS's local storage facilities, protected by your device's security features (passcode, Face ID, encryption at rest). Network traffic between the app and our backend, and between our backend and OpenAI, is transmitted over HTTPS.</p>" },
+                    { h: "Your Rights (GDPR / Swiss FADP)", b: "<p>If you are located in the European Economic Area (EEA), the United Kingdom, or Switzerland, you have rights under the General Data Protection Regulation (GDPR) and the Swiss Federal Act on Data Protection (FADP):</p><ul><li><strong>Right of access</strong> — All your data is visible directly in the app.</li><li><strong>Right to rectification</strong> — You can edit pool setup, products, and measurements directly in the app.</li><li><strong>Right to erasure</strong> — Uninstall the app to delete all locally stored data.</li><li><strong>Right to data portability</strong> — Pool data is plain JSON in iOS local storage and can be exported via standard iOS tools.</li><li><strong>Right to object</strong> — You may stop using photo analysis at any time and enter values manually instead.</li></ul><p>For data processed by our third-party services (OpenAI, Supabase, Sentry), please refer to those providers' privacy policies linked above.</p><p>If you have questions about your rights or wish to exercise them, contact us at <a href=\"mailto:support@klifter.com\">support@klifter.com</a>.</p>" },
+                    { h: "International Data Transfers", b: "<p>Photos sent for analysis are transmitted to OpenAI infrastructure, which may include servers in the United States. Our backend is hosted on Supabase. By using the photo analysis feature, you consent to this transfer. Manual entry keeps all data on your device.</p>" },
+                    { h: "Disclaimer", b: "<p>Spalyzer provides general guidance on pool water chemistry. It is not a substitute for professional advice. Always verify safety limits and consult a qualified pool professional before adding chemicals if you are unsure. See our <a href=\"terms.html\">Terms of Use</a> for the full disclaimer.</p>" },
+                    { h: "Changes to This Policy", b: "<p>We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated revision date.</p>" },
+                    { h: "Contact Us", b: "<p>If you have any questions about this Privacy Policy, please contact us at <a href=\"mailto:support@klifter.com\">support@klifter.com</a>.</p>" }
+                ]
+            },
+            es: {
+                title: "Política de Privacidad",
+                subtitle: "Spalyzer — Análisis del agua de la piscina",
+                updated: "Última actualización: 5 de mayo de 2026",
+                sections: [
+                    { h: "Resumen", b: "<p>Spalyzer no requiere cuenta, no recopila información personal y almacena todos los datos de tu piscina exclusivamente en tu dispositivo. Las fotos que haces del display del lector, las tiras reactivas o las etiquetas de productos se envían a OpenAI únicamente para el análisis de imagen y no las almacenamos.</p>" },
+                    { h: "Introducción", b: "<p>Klifter Apps («nosotros») opera la aplicación móvil Spalyzer. Esta Política de Privacidad explica cómo gestionamos la información cuando usas nuestra app.</p>" },
+                    { h: "Información que recopilamos", b: "<p>No recopilamos información personal identificable como nombre, correo electrónico, ubicación o número de teléfono. La app funciona totalmente sin registro.</p>" },
+                    { h: "Datos almacenados en tu dispositivo", b: "<p>Spalyzer almacena los siguientes datos sólo en el almacenamiento local de iOS de tu dispositivo:</p><ul><li>Tu configuración de piscina (nombre, volumen, interior/exterior, temperatura por defecto, método de desinfección, ozonador, sistema de unidades)</li><li>Productos químicos que has añadido a tu biblioteca (marca, nombre, principio activo, concentración, forma, rol)</li><li>Tus mediciones (cloro libre, pH, alcalinidad total, opcionalmente ácido cianúrico y dureza cálcica, temperatura del agua, marcas de tiempo, notas opcionales)</li><li>Tu preferencia de idioma, indicador de onboarding y consentimiento de privacidad</li><li>Un identificador anónimo del dispositivo (UUID aleatorio) usado únicamente para aplicar límites diarios al análisis de fotos</li></ul><p>Estos datos nunca salen de tu dispositivo, salvo en los casos descritos explícitamente más abajo.</p>" },
+                    { h: "Análisis de fotos", b: "<p>Cuando haces una foto del display del lector, de una tira reactiva o de la etiqueta de un producto, la foto se envía a nuestro backend (una Edge Function de Supabase), que la reenvía a la API de Visión de OpenAI (modelo <em>gpt-4o-mini</em>) para su análisis. La respuesta — un pequeño objeto JSON con los valores reconocidos — se devuelve a tu dispositivo para que la confirmes.</p><p><strong>Importante:</strong></p><ul><li>No almacenamos la foto. Sólo se mantiene en memoria durante la duración de la solicitud.</li><li>OpenAI no conserva las imágenes enviadas mediante su API para entrenamiento, según su <a href=\"https://openai.com/enterprise-privacy\">política de uso de datos de la API</a>.</li><li>Lo único que se guarda en nuestro backend es un contador de solicitudes por día asociado al identificador anónimo del dispositivo. No se persiste ningún dato de imagen.</li><li>Puedes usar la app sin hacer fotos introduciendo los valores manualmente — en ese caso nada sale de tu dispositivo.</li></ul>" },
+                    { h: "Servicios de terceros", b: "<p><strong>OpenAI</strong> — Las fotos se procesan mediante la API de Visión de OpenAI para el reconocimiento de valores. Política de privacidad: <a href=\"https://openai.com/policies/privacy-policy\">openai.com/policies/privacy-policy</a> y <a href=\"https://openai.com/enterprise-privacy\">privacidad de datos de la API</a>.</p><p><strong>Supabase</strong> — Operamos un pequeño backend en Supabase que proxy las solicitudes de análisis y aplica los límites diarios por dispositivo. Sólo se almacena el identificador anónimo emparejado con el contador del día actual. Política: <a href=\"https://supabase.com/privacy\">supabase.com/privacy</a>.</p><p><strong>Apple App Store</strong> — La distribución y las compras dentro de la app las gestiona íntegramente Apple. No tenemos acceso a tu información de pago. Ver <a href=\"https://www.apple.com/legal/privacy/\">apple.com/legal/privacy</a>.</p><p><strong>Sentry</strong> — En las builds de release, la app puede enviar informes de fallo anónimos a Sentry para diagnosticar errores. Los informes incluyen stack traces y modelo de dispositivo, pero ningún dato personal ni datos de la piscina. Ver <a href=\"https://sentry.io/privacy/\">sentry.io/privacy</a>.</p>" },
+                    { h: "Lo que no hacemos", b: "<ul><li>No mostramos publicidad.</li><li>No usamos analítica de marketing ni SDKs de seguimiento de terceros.</li><li>No vendemos ni compartimos datos con socios de marketing.</li><li>No recopilamos datos de salud, biométricos ni de ubicación.</li><li>No vinculamos ningún dato a tu identidad.</li></ul>" },
+                    { h: "Privacidad de los menores", b: "<p>Spalyzer está dirigida a adultos que mantienen piscinas. No está destinada a menores de 13 años. No recopilamos a sabiendas información personal de menores.</p>" },
+                    { h: "Seguridad de los datos", b: "<p>Los datos de la piscina se guardan usando el almacenamiento local de iOS, protegido por las funciones de seguridad de tu dispositivo (código, Face ID, cifrado en reposo). El tráfico de red entre la app y nuestro backend, y entre nuestro backend y OpenAI, se transmite por HTTPS.</p>" },
+                    { h: "Tus derechos (RGPD / LOPD-GDD / DSG suizo)", b: "<p>Si te encuentras en el Espacio Económico Europeo (EEE), el Reino Unido o Suiza, tienes derechos bajo el Reglamento General de Protección de Datos (RGPD) y la Ley Federal Suiza de Protección de Datos (DSG/LPD):</p><ul><li><strong>Derecho de acceso</strong> — Todos tus datos son visibles directamente en la app.</li><li><strong>Derecho de rectificación</strong> — Puedes editar la configuración de la piscina, productos y mediciones directamente en la app.</li><li><strong>Derecho de supresión</strong> — Desinstala la app para eliminar todos los datos almacenados localmente.</li><li><strong>Derecho a la portabilidad</strong> — Los datos de la piscina son JSON plano en el almacenamiento local de iOS y se pueden exportar con herramientas estándar de iOS.</li><li><strong>Derecho de oposición</strong> — Puedes dejar de usar el análisis de fotos en cualquier momento e introducir los valores manualmente.</li></ul><p>Para los datos procesados por nuestros proveedores terceros (OpenAI, Supabase, Sentry), consulta sus respectivas políticas enlazadas arriba.</p><p>Si tienes preguntas sobre tus derechos o quieres ejercerlos, contáctanos en <a href=\"mailto:support@klifter.com\">support@klifter.com</a>.</p>" },
+                    { h: "Transferencias internacionales de datos", b: "<p>Las fotos enviadas para análisis se transmiten a la infraestructura de OpenAI, que puede incluir servidores en Estados Unidos. Nuestro backend está alojado en Supabase. Al usar la función de análisis de fotos, consientes esta transferencia. La introducción manual mantiene todos los datos en tu dispositivo.</p>" },
+                    { h: "Aviso legal", b: "<p>Spalyzer ofrece orientación general sobre la química del agua de la piscina. No sustituye al asesoramiento profesional. Verifica siempre los límites de seguridad y, en caso de duda, consulta a un profesional cualificado antes de añadir productos químicos. Ver las <a href=\"terms.html\">Condiciones de uso</a> para el aviso completo.</p>" },
+                    { h: "Cambios en esta política", b: "<p>Podemos actualizar esta Política de Privacidad de vez en cuando. Cualquier cambio se publicará en esta página con una fecha de revisión actualizada.</p>" },
+                    { h: "Contacto", b: "<p>Si tienes preguntas sobre esta Política de Privacidad, contáctanos en <a href=\"mailto:support@klifter.com\">support@klifter.com</a>.</p>" }
+                ]
+            },
+            fr: {
+                title: "Politique de confidentialité",
+                subtitle: "Spalyzer — Analyse de l'eau de piscine",
+                updated: "Dernière mise à jour : 5 mai 2026",
+                sections: [
+                    { h: "Résumé", b: "<p>Spalyzer ne nécessite pas de compte, ne collecte aucune donnée personnelle et stocke toutes les données de ta piscine uniquement sur ton appareil. Les photos que tu fais de l'écran de ton lecteur, de bandelettes ou d'étiquettes de produits sont envoyées à OpenAI uniquement pour l'analyse d'image et ne sont pas stockées par nous.</p>" },
+                    { h: "Introduction", b: "<p>Klifter Apps (« nous ») exploite l'application mobile Spalyzer. Cette politique explique comment nous traitons les informations lorsque tu utilises notre app.</p>" },
+                    { h: "Informations que nous collectons", b: "<p>Nous ne collectons pas d'informations personnelles identifiables telles que nom, adresse e-mail, localisation ou numéro de téléphone. L'app fonctionne entièrement sans inscription.</p>" },
+                    { h: "Données stockées sur ton appareil", b: "<p>Spalyzer stocke les données suivantes uniquement dans le stockage local iOS sur ton appareil :</p><ul><li>Ta configuration de piscine (nom, volume, intérieur/extérieur, température par défaut, méthode de désinfection, ozonateur, système d'unités)</li><li>Produits chimiques que tu as ajoutés à ta bibliothèque (marque, nom, principe actif, concentration, forme, rôle)</li><li>Tes mesures (chlore libre, pH, alcalinité totale, optionnellement acide cyanurique et dureté calcique, température de l'eau, horodatage, notes optionnelles)</li><li>Ta préférence de langue, indicateur d'onboarding et consentement de confidentialité</li><li>Un identifiant anonyme de l'appareil (UUID aléatoire) utilisé uniquement pour appliquer les limites journalières d'analyse photo</li></ul><p>Ces données ne quittent jamais ton appareil, sauf comme explicitement décrit ci-dessous.</p>" },
+                    { h: "Analyse photo", b: "<p>Lorsque tu prends une photo d'un écran de lecteur, d'une bandelette ou d'une étiquette, la photo est envoyée à notre backend (une Edge Function Supabase), qui la transmet à l'API Vision d'OpenAI (modèle <em>gpt-4o-mini</em>) pour analyse. La réponse — un petit objet JSON contenant les valeurs reconnues — est retournée à ton appareil pour confirmation.</p><p><strong>Important :</strong></p><ul><li>Nous ne stockons pas la photo. Elle est conservée en mémoire uniquement pendant la durée de la requête.</li><li>OpenAI ne conserve pas les images envoyées via leur API pour l'entraînement, conformément à leur <a href=\"https://openai.com/enterprise-privacy\">politique d'utilisation des données de l'API</a>.</li><li>La seule chose stockée sur notre backend est un compteur journalier indexé par l'identifiant anonyme. Aucune donnée d'image n'est persistée.</li><li>Tu peux utiliser l'app sans prendre de photos en saisissant les valeurs manuellement — dans ce cas, rien ne quitte ton appareil.</li></ul>" },
+                    { h: "Services tiers", b: "<p><strong>OpenAI</strong> — Les photos sont traitées via l'API Vision d'OpenAI pour la reconnaissance des valeurs. Politique : <a href=\"https://openai.com/policies/privacy-policy\">openai.com/policies/privacy-policy</a> et <a href=\"https://openai.com/enterprise-privacy\">confidentialité des données de l'API</a>.</p><p><strong>Supabase</strong> — Nous exploitons un petit backend chez Supabase qui relaie les requêtes d'analyse et applique les limites journalières par appareil. Seul l'identifiant anonyme avec le compteur du jour est stocké. Politique : <a href=\"https://supabase.com/privacy\">supabase.com/privacy</a>.</p><p><strong>Apple App Store</strong> — La distribution et les achats in-app sont entièrement gérés par Apple. Nous n'avons pas accès à tes informations de paiement. Voir <a href=\"https://www.apple.com/legal/privacy/\">apple.com/legal/privacy</a>.</p><p><strong>Sentry</strong> — Dans les builds de release, l'app peut envoyer des rapports de crash anonymes à Sentry pour diagnostiquer les bugs. Les rapports incluent stack traces et modèle d'appareil, mais aucune donnée personnelle ni donnée de piscine. Voir <a href=\"https://sentry.io/privacy/\">sentry.io/privacy</a>.</p>" },
+                    { h: "Ce que nous ne faisons pas", b: "<ul><li>Nous ne montrons pas de publicités.</li><li>Nous n'utilisons pas d'analytique marketing tierce ni de SDK de tracking.</li><li>Nous ne vendons ni ne partageons de données avec des partenaires marketing.</li><li>Nous ne collectons pas de données de santé, biométriques ni de localisation.</li><li>Nous ne lions aucune donnée à ton identité.</li></ul>" },
+                    { h: "Confidentialité des enfants", b: "<p>Spalyzer est destinée aux adultes qui entretiennent des piscines. Elle n'est pas dirigée vers les enfants de moins de 13 ans. Nous ne collectons pas sciemment d'informations personnelles d'enfants.</p>" },
+                    { h: "Sécurité des données", b: "<p>Les données de la piscine sont stockées via le stockage local iOS, protégé par les fonctions de sécurité de ton appareil (code, Face ID, chiffrement au repos). Le trafic réseau entre l'app et notre backend, et entre notre backend et OpenAI, est transmis en HTTPS.</p>" },
+                    { h: "Tes droits (RGPD / LPD suisse)", b: "<p>Si tu es situé dans l'Espace économique européen (EEE), au Royaume-Uni ou en Suisse, tu as des droits sous le Règlement général sur la protection des données (RGPD) et la Loi fédérale suisse sur la protection des données (LPD) :</p><ul><li><strong>Droit d'accès</strong> — Toutes tes données sont visibles directement dans l'app.</li><li><strong>Droit de rectification</strong> — Tu peux éditer la configuration de la piscine, les produits et les mesures directement dans l'app.</li><li><strong>Droit à l'effacement</strong> — Désinstalle l'app pour supprimer toutes les données stockées localement.</li><li><strong>Droit à la portabilité</strong> — Les données de la piscine sont du JSON brut dans le stockage local iOS et peuvent être exportées via les outils iOS standards.</li><li><strong>Droit d'opposition</strong> — Tu peux arrêter l'analyse photo à tout moment et saisir les valeurs manuellement.</li></ul><p>Pour les données traitées par nos services tiers (OpenAI, Supabase, Sentry), consulte leurs politiques liées ci-dessus.</p><p>Pour toute question sur tes droits ou pour les exercer, contacte-nous à <a href=\"mailto:support@klifter.com\">support@klifter.com</a>.</p>" },
+                    { h: "Transferts internationaux de données", b: "<p>Les photos envoyées pour analyse sont transmises à l'infrastructure d'OpenAI, qui peut inclure des serveurs aux États-Unis. Notre backend est hébergé chez Supabase. En utilisant la fonction d'analyse photo, tu consens à ce transfert. La saisie manuelle garde toutes les données sur ton appareil.</p>" },
+                    { h: "Avertissement", b: "<p>Spalyzer fournit des indications générales sur la chimie de l'eau. Elle ne remplace pas un conseil professionnel. Vérifie toujours les limites de sécurité et consulte un professionnel qualifié en cas de doute avant d'ajouter des produits chimiques. Voir les <a href=\"terms.html\">Conditions d'utilisation</a> pour l'avertissement complet.</p>" },
+                    { h: "Modifications de cette politique", b: "<p>Nous pouvons mettre à jour cette politique de temps à autre. Toute modification sera publiée sur cette page avec une date de révision mise à jour.</p>" },
+                    { h: "Contact", b: "<p>Pour toute question concernant cette politique de confidentialité, contacte-nous à <a href=\"mailto:support@klifter.com\">support@klifter.com</a>.</p>" }
+                ]
+            },
+            it: {
+                title: "Informativa sulla privacy",
+                subtitle: "Spalyzer — Analisi dell'acqua di piscina",
+                updated: "Ultimo aggiornamento: 5 maggio 2026",
+                sections: [
+                    { h: "Riepilogo", b: "<p>Spalyzer non richiede un account, non raccoglie informazioni personali e archivia tutti i dati della tua piscina esclusivamente sul tuo dispositivo. Le foto che scatti del display del lettore, delle strisce reattive o delle etichette dei prodotti vengono inviate a OpenAI solo per l'analisi dell'immagine e non vengono memorizzate da noi.</p>" },
+                    { h: "Introduzione", b: "<p>Klifter Apps («noi») gestisce l'applicazione mobile Spalyzer. Questa informativa spiega come trattiamo le informazioni quando usi la nostra app.</p>" },
+                    { h: "Informazioni che raccogliamo", b: "<p>Non raccogliamo informazioni personali identificabili come nome, indirizzo e-mail, posizione o numero di telefono. L'app funziona completamente senza registrazione.</p>" },
+                    { h: "Dati archiviati sul tuo dispositivo", b: "<p>Spalyzer archivia i seguenti dati solo nella memoria locale iOS del tuo dispositivo:</p><ul><li>La tua configurazione della piscina (nome, volume, interno/esterno, temperatura predefinita, metodo di disinfezione, ozonatore, sistema di unità)</li><li>Prodotti chimici che hai aggiunto alla tua libreria (marca, nome, principio attivo, concentrazione, forma, ruolo)</li><li>Le tue misurazioni (cloro libero, pH, alcalinità totale, opzionalmente acido cianurico e durezza calcica, temperatura dell'acqua, timestamp, note opzionali)</li><li>La tua preferenza di lingua, indicatore di onboarding e consenso privacy</li><li>Un identificatore anonimo del dispositivo (UUID casuale) usato esclusivamente per applicare limiti giornalieri all'analisi delle foto</li></ul><p>Questi dati non lasciano mai il tuo dispositivo, salvo come esplicitamente descritto di seguito.</p>" },
+                    { h: "Analisi delle foto", b: "<p>Quando scatti una foto di un display di lettore, di una striscia o di un'etichetta, la foto viene inviata al nostro backend (una Edge Function di Supabase), che la inoltra all'API Vision di OpenAI (modello <em>gpt-4o-mini</em>) per l'analisi. La risposta — un piccolo oggetto JSON con i valori riconosciuti — viene restituita al tuo dispositivo per la conferma.</p><p><strong>Importante:</strong></p><ul><li>Non archiviamo la foto. Viene mantenuta in memoria solo per la durata della richiesta.</li><li>OpenAI non conserva le immagini inviate tramite la propria API per l'addestramento, secondo la <a href=\"https://openai.com/enterprise-privacy\">politica di utilizzo dei dati API</a>.</li><li>L'unica cosa archiviata sul nostro backend è un contatore di richieste giornaliere associato all'identificatore anonimo. Nessun dato di immagine viene persistito.</li><li>Puoi usare l'app senza scattare foto inserendo i valori manualmente — in quel caso nulla esce dal tuo dispositivo.</li></ul>" },
+                    { h: "Servizi di terze parti", b: "<p><strong>OpenAI</strong> — Le foto vengono elaborate tramite l'API Vision di OpenAI per il riconoscimento dei valori. Privacy: <a href=\"https://openai.com/policies/privacy-policy\">openai.com/policies/privacy-policy</a> e <a href=\"https://openai.com/enterprise-privacy\">privacy dei dati API</a>.</p><p><strong>Supabase</strong> — Operiamo un piccolo backend su Supabase che fa da proxy per le richieste di analisi e applica i limiti giornalieri per dispositivo. Viene archiviato solo l'identificatore anonimo con il contatore del giorno corrente. Privacy: <a href=\"https://supabase.com/privacy\">supabase.com/privacy</a>.</p><p><strong>Apple App Store</strong> — Distribuzione e acquisti in-app sono gestiti interamente da Apple. Non abbiamo accesso ai tuoi dati di pagamento. Vedi <a href=\"https://www.apple.com/legal/privacy/\">apple.com/legal/privacy</a>.</p><p><strong>Sentry</strong> — Nelle build di release, l'app può inviare report di crash anonimi a Sentry per diagnosticare bug. I report includono stack trace e modello del dispositivo, ma nessun dato personale né dato della piscina. Vedi <a href=\"https://sentry.io/privacy/\">sentry.io/privacy</a>.</p>" },
+                    { h: "Cosa non facciamo", b: "<ul><li>Non mostriamo pubblicità.</li><li>Non usiamo analytics di marketing o SDK di tracking di terze parti.</li><li>Non vendiamo né condividiamo dati con partner di marketing.</li><li>Non raccogliamo dati sanitari, biometrici o di posizione.</li><li>Non colleghiamo alcun dato alla tua identità.</li></ul>" },
+                    { h: "Privacy dei minori", b: "<p>Spalyzer è destinata agli adulti che mantengono piscine. Non è indirizzata a minori di 13 anni. Non raccogliamo consapevolmente informazioni personali da minori.</p>" },
+                    { h: "Sicurezza dei dati", b: "<p>I dati della piscina sono archiviati usando le facilità di storage locale di iOS, protetti dalle funzioni di sicurezza del tuo dispositivo (codice, Face ID, crittografia a riposo). Il traffico di rete tra app e backend, e tra backend e OpenAI, viene trasmesso via HTTPS.</p>" },
+                    { h: "I tuoi diritti (GDPR / DSG svizzero)", b: "<p>Se ti trovi nello Spazio Economico Europeo (SEE), nel Regno Unito o in Svizzera, hai diritti ai sensi del Regolamento Generale sulla Protezione dei Dati (GDPR) e della Legge federale svizzera sulla protezione dei dati (LPD/DSG):</p><ul><li><strong>Diritto di accesso</strong> — Tutti i tuoi dati sono visibili direttamente nell'app.</li><li><strong>Diritto di rettifica</strong> — Puoi modificare configurazione della piscina, prodotti e misurazioni direttamente nell'app.</li><li><strong>Diritto alla cancellazione</strong> — Disinstalla l'app per eliminare tutti i dati archiviati localmente.</li><li><strong>Diritto alla portabilità</strong> — I dati della piscina sono JSON semplice nello storage locale iOS ed esportabili con gli strumenti iOS standard.</li><li><strong>Diritto di opposizione</strong> — Puoi smettere di usare l'analisi delle foto in qualsiasi momento e inserire i valori manualmente.</li></ul><p>Per i dati elaborati dai nostri servizi terzi (OpenAI, Supabase, Sentry), consulta le rispettive informative linkate sopra.</p><p>Per domande sui tuoi diritti o per esercitarli, contattaci a <a href=\"mailto:support@klifter.com\">support@klifter.com</a>.</p>" },
+                    { h: "Trasferimenti internazionali di dati", b: "<p>Le foto inviate per l'analisi vengono trasmesse all'infrastruttura di OpenAI, che può includere server negli Stati Uniti. Il nostro backend è ospitato su Supabase. Usando la funzione di analisi foto, acconsenti a questo trasferimento. L'inserimento manuale mantiene tutti i dati sul tuo dispositivo.</p>" },
+                    { h: "Avvertenza", b: "<p>Spalyzer fornisce indicazioni generali sulla chimica dell'acqua. Non sostituisce una consulenza professionale. Verifica sempre i limiti di sicurezza e in caso di dubbi consulta un professionista qualificato prima di aggiungere prodotti chimici. Vedi le <a href=\"terms.html\">Condizioni d'uso</a> per l'avvertenza completa.</p>" },
+                    { h: "Modifiche a questa informativa", b: "<p>Potremmo aggiornare questa informativa di tanto in tanto. Eventuali modifiche saranno pubblicate su questa pagina con una data di revisione aggiornata.</p>" },
+                    { h: "Contatti", b: "<p>Per domande su questa informativa, contattaci a <a href=\"mailto:support@klifter.com\">support@klifter.com</a>.</p>" }
+                ]
+            },
+            pt: {
+                title: "Política de Privacidade",
+                subtitle: "Spalyzer — Análise da água da piscina",
+                updated: "Última atualização: 5 de maio de 2026",
+                sections: [
+                    { h: "Resumo", b: "<p>O Spalyzer não exige conta, não coleta informações pessoais e armazena todos os dados da sua piscina exclusivamente no seu dispositivo. As fotos que você tira do display do leitor, das fitas reagentes ou dos rótulos dos produtos são enviadas à OpenAI apenas para análise de imagem e não são armazenadas por nós.</p>" },
+                    { h: "Introdução", b: "<p>A Klifter Apps («nós») opera o aplicativo móvel Spalyzer. Esta Política de Privacidade explica como tratamos as informações quando você usa nosso app.</p>" },
+                    { h: "Informações que coletamos", b: "<p>Não coletamos informações pessoais identificáveis como nome, e-mail, localização ou número de telefone. O app funciona inteiramente sem cadastro.</p>" },
+                    { h: "Dados armazenados no seu dispositivo", b: "<p>O Spalyzer armazena os seguintes dados apenas no armazenamento local do iOS no seu dispositivo:</p><ul><li>Sua configuração da piscina (nome, volume, interno/externo, temperatura padrão, método de desinfecção, ozonizador, sistema de unidades)</li><li>Produtos químicos que você adicionou à sua biblioteca (marca, nome, princípio ativo, concentração, forma, papel)</li><li>Suas medições (cloro livre, pH, alcalinidade total, opcionalmente ácido cianúrico e dureza cálcica, temperatura da água, timestamps, notas opcionais)</li><li>Sua preferência de idioma, indicador de onboarding e consentimento de privacidade</li><li>Um identificador anônimo do dispositivo (UUID aleatório) usado exclusivamente para aplicar limites diários à análise de fotos</li></ul><p>Esses dados nunca saem do seu dispositivo, exceto conforme descrito explicitamente abaixo.</p>" },
+                    { h: "Análise de fotos", b: "<p>Quando você tira uma foto de um display de leitor, de uma fita reagente ou de um rótulo de produto, a foto é enviada ao nosso backend (uma Edge Function do Supabase), que a encaminha para a API Vision da OpenAI (modelo <em>gpt-4o-mini</em>) para análise. A resposta — um pequeno objeto JSON com os valores reconhecidos — é devolvida ao seu dispositivo para confirmação.</p><p><strong>Importante:</strong></p><ul><li>Não armazenamos a foto. Ela é mantida em memória apenas durante a duração da solicitação.</li><li>A OpenAI não retém imagens enviadas via API para treinamento, conforme sua <a href=\"https://openai.com/enterprise-privacy\">política de uso de dados da API</a>.</li><li>A única coisa armazenada em nosso backend é um contador de requisições por dia associado ao identificador anônimo. Nenhum dado de imagem é persistido.</li><li>Você pode usar o app sem tirar fotos, inserindo os valores manualmente — neste caso, nada sai do seu dispositivo.</li></ul>" },
+                    { h: "Serviços de terceiros", b: "<p><strong>OpenAI</strong> — As fotos são processadas via API Vision da OpenAI para reconhecimento de valores. Política: <a href=\"https://openai.com/policies/privacy-policy\">openai.com/policies/privacy-policy</a> e <a href=\"https://openai.com/enterprise-privacy\">privacidade de dados da API</a>.</p><p><strong>Supabase</strong> — Operamos um pequeno backend no Supabase que faz proxy das requisições de análise e aplica os limites diários por dispositivo. Apenas o identificador anônimo com o contador do dia atual é armazenado. Política: <a href=\"https://supabase.com/privacy\">supabase.com/privacy</a>.</p><p><strong>Apple App Store</strong> — Distribuição e compras dentro do app são gerenciadas inteiramente pela Apple. Não temos acesso às suas informações de pagamento. Ver <a href=\"https://www.apple.com/legal/privacy/\">apple.com/legal/privacy</a>.</p><p><strong>Sentry</strong> — Em builds de release, o app pode enviar relatórios de crash anônimos para o Sentry para diagnosticar bugs. Os relatórios incluem stack traces e modelo do dispositivo, mas nenhum dado pessoal nem dados da piscina. Ver <a href=\"https://sentry.io/privacy/\">sentry.io/privacy</a>.</p>" },
+                    { h: "O que não fazemos", b: "<ul><li>Não mostramos anúncios.</li><li>Não usamos analytics de marketing nem SDKs de rastreamento de terceiros.</li><li>Não vendemos nem compartilhamos dados com parceiros de marketing.</li><li>Não coletamos dados de saúde, biométricos ou de localização.</li><li>Não vinculamos nenhum dado à sua identidade.</li></ul>" },
+                    { h: "Privacidade infantil", b: "<p>O Spalyzer é destinado a adultos que mantêm piscinas. Não é direcionado a crianças menores de 13 anos. Não coletamos conscientemente informações pessoais de crianças.</p>" },
+                    { h: "Segurança dos dados", b: "<p>Os dados da piscina são armazenados usando os recursos de armazenamento local do iOS, protegidos pelos recursos de segurança do seu dispositivo (código, Face ID, criptografia em repouso). O tráfego de rede entre o app e nosso backend, e entre nosso backend e a OpenAI, é transmitido via HTTPS.</p>" },
+                    { h: "Seus direitos (GDPR / LGPD / DSG suíço)", b: "<p>Se você estiver no Espaço Econômico Europeu (EEE), no Reino Unido, na Suíça ou no Brasil, você tem direitos sob o Regulamento Geral de Proteção de Dados (GDPR), a Lei Geral de Proteção de Dados brasileira (LGPD) e a Lei Federal Suíça de Proteção de Dados (LPD/DSG):</p><ul><li><strong>Direito de acesso</strong> — Todos os seus dados são visíveis diretamente no app.</li><li><strong>Direito de retificação</strong> — Você pode editar configuração da piscina, produtos e medições diretamente no app.</li><li><strong>Direito à eliminação</strong> — Desinstale o app para apagar todos os dados armazenados localmente.</li><li><strong>Direito à portabilidade</strong> — Os dados da piscina são JSON puro no armazenamento local iOS e podem ser exportados via ferramentas padrão do iOS.</li><li><strong>Direito de oposição</strong> — Você pode parar de usar a análise de fotos a qualquer momento e inserir os valores manualmente.</li></ul><p>Para dados processados pelos nossos serviços terceiros (OpenAI, Supabase, Sentry), consulte as respectivas políticas vinculadas acima.</p><p>Para dúvidas sobre seus direitos ou para exercê-los, entre em contato em <a href=\"mailto:support@klifter.com\">support@klifter.com</a>.</p>" },
+                    { h: "Transferências internacionais de dados", b: "<p>As fotos enviadas para análise são transmitidas à infraestrutura da OpenAI, que pode incluir servidores nos Estados Unidos. Nosso backend é hospedado no Supabase. Ao usar a função de análise de fotos, você consente com essa transferência. A entrada manual mantém todos os dados no seu dispositivo.</p>" },
+                    { h: "Aviso", b: "<p>O Spalyzer fornece orientação geral sobre química da água de piscina. Não substitui o aconselhamento profissional. Sempre verifique os limites de segurança e, em caso de dúvida, consulte um profissional qualificado antes de adicionar produtos químicos. Ver os <a href=\"terms.html\">Termos de Uso</a> para o aviso completo.</p>" },
+                    { h: "Alterações nesta política", b: "<p>Podemos atualizar esta Política de Privacidade de tempos em tempos. Quaisquer mudanças serão publicadas nesta página com uma data de revisão atualizada.</p>" },
+                    { h: "Contato", b: "<p>Para dúvidas sobre esta Política de Privacidade, entre em contato em <a href=\"mailto:support@klifter.com\">support@klifter.com</a>.</p>" }
+                ]
+            }
+        };
+
+        const SUPPORTED = ["de", "en", "es", "fr", "it", "pt"];
+
+        function detectLang() {
+            try {
+                const stored = localStorage.getItem("spalyzer-lang");
+                if (stored && SUPPORTED.includes(stored)) return stored;
+            } catch (_) {}
+            const nav = (navigator.language || navigator.userLanguage || "en")
+                .slice(0, 2).toLowerCase();
+            return SUPPORTED.includes(nav) ? nav : "en";
+        }
+
+        function setLang(lang) {
+            const t = translations[lang] || translations.en;
+            document.documentElement.lang = lang;
+            document.title = t.title + " — Spalyzer";
+            document.getElementById("page-title").textContent = t.title;
+            document.getElementById("page-subtitle").textContent = t.subtitle;
+            document.getElementById("updated").textContent = t.updated;
+
+            const container = document.getElementById("sections");
+            container.innerHTML = "";
+            t.sections.forEach(s => {
+                const h2 = document.createElement("h2");
+                h2.textContent = s.h;
+                container.appendChild(h2);
+                const wrap = document.createElement("div");
+                wrap.innerHTML = s.b;
+                container.appendChild(wrap);
+            });
+
+            document.querySelectorAll("#lang-switcher button").forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.lang === lang);
+            });
+            try { localStorage.setItem("spalyzer-lang", lang); } catch (_) {}
+        }
+
+        document.querySelectorAll("#lang-switcher button").forEach(btn => {
+            btn.addEventListener("click", () => setLang(btn.dataset.lang));
+        });
+
+        setLang(detectLang());
+    </script>
 </body>
 </html>

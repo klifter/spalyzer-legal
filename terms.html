@@ -14,6 +14,25 @@
             padding: 40px 20px;
         }
         .container { max-width: 680px; margin: 0 auto; }
+        .lang-switcher {
+            display: flex; gap: 6px; justify-content: flex-end;
+            margin-bottom: 24px; flex-wrap: wrap;
+        }
+        .lang-switcher button {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.18);
+            color: rgba(255,255,255,0.85);
+            font-size: 13px; font-weight: 500;
+            padding: 6px 12px; border-radius: 980px;
+            cursor: pointer; font-family: inherit;
+        }
+        .lang-switcher button.active {
+            background: #67E8F9; color: #0A1628;
+            border-color: #67E8F9;
+        }
+        .lang-switcher button:hover:not(.active) {
+            background: rgba(255,255,255,0.12);
+        }
         h1 { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 8px; }
         .subtitle { color: #67E8F9; font-size: 14px; font-weight: 500; margin-bottom: 32px; }
         h2 { font-size: 18px; font-weight: 600; color: #fff; margin-top: 32px; margin-bottom: 12px; }
@@ -28,61 +47,183 @@
 </head>
 <body>
     <div class="container">
-        <h1>Terms of Use</h1>
-        <div class="subtitle">Spalyzer — Pool Water Analysis</div>
+        <div class="lang-switcher" id="lang-switcher">
+            <button data-lang="de">Deutsch</button>
+            <button data-lang="en">English</button>
+            <button data-lang="es">Español</button>
+            <button data-lang="fr">Français</button>
+            <button data-lang="it">Italiano</button>
+            <button data-lang="pt">Português</button>
+        </div>
 
-        <h2>Acceptance of Terms</h2>
-        <p>By downloading, installing, or using Spalyzer ("the App"), you agree to be bound by these Terms of Use. If you do not agree, please do not use the App.</p>
+        <h1 id="page-title"></h1>
+        <div class="subtitle" id="page-subtitle"></div>
 
-        <h2>Description of Service</h2>
-        <p>Spalyzer is a mobile application that reads water chemistry values from photos of pool test reader displays, test strips, and product labels, and provides general dosing guidance for swimming pools. The App is provided by Klifter Apps ("we", "us", or "our").</p>
+        <div id="sections"></div>
 
-        <h2>Disclaimer — No Professional Advice</h2>
-        <p>The water chemistry information, dosing suggestions, and safety warnings provided by Spalyzer are for informational purposes only. They do not constitute professional, medical, chemical, or safety advice. Pool chemistry is sensitive and improper handling of chemicals can cause harm. We make no guarantees regarding the accuracy of recognized values, dosing calculations, or safety assessments.</p>
-        <p><strong>Always read and follow the manufacturer's instructions on the product label of any chemical you use. When in doubt, consult a qualified pool maintenance professional.</strong></p>
-
-        <h2>Image Recognition Accuracy</h2>
-        <p>The App uses computer vision to read values from photographs. Recognition accuracy depends on lighting, focus, framing, and image quality, and is not perfect. You are responsible for verifying every recognized value before confirming a measurement and acting on any dosing recommendation. The App always lets you review and correct values before saving.</p>
-
-        <h2>Use at Your Own Risk</h2>
-        <p>You acknowledge that:</p>
-        <ul>
-            <li>Pool chemicals can be dangerous if mishandled, mixed incorrectly, or used in incorrect dosages.</li>
-            <li>Bathing in pool water with values outside safe ranges can cause harm.</li>
-            <li>You are solely responsible for ensuring your pool water is safe for use.</li>
-            <li>The App's suggestions are general guidelines that assume specific pool conditions (chlorine disinfection, optionally an ozonator) and may not apply to your situation.</li>
-        </ul>
-
-        <h2>Limitation of Liability</h2>
-        <p>To the fullest extent permitted by applicable law, Klifter Apps shall not be liable for any direct, indirect, incidental, special, consequential, or punitive damages arising from your use of or inability to use the App, including but not limited to:</p>
-        <ul>
-            <li>Incorrect recognition of water chemistry values</li>
-            <li>Incorrect dosing calculations or recommendations</li>
-            <li>Damage to your pool, equipment, or surroundings</li>
-            <li>Injury or illness resulting from improperly treated water</li>
-            <li>Loss of data stored on your device</li>
-            <li>Interruption or unavailability of the App or its photo analysis backend</li>
-        </ul>
-
-        <h2>No Warranty</h2>
-        <p>The App is provided "as is" and "as available" without warranties of any kind, whether express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement. We do not warrant that the App will be uninterrupted, error-free, or that its photo analysis will always succeed.</p>
-
-        <h2>Photo Analysis &amp; Rate Limits</h2>
-        <p>Photo analysis uses third-party services (OpenAI Vision, via our Supabase backend) and is subject to a per-device daily rate limit. We reserve the right to change the rate limit, change the underlying provider, or temporarily suspend the photo analysis feature without notice. Manual entry of values remains available regardless.</p>
-
-        <h2>Intellectual Property</h2>
-        <p>All content, design, and code in Spalyzer are the property of Klifter Apps and are protected by applicable intellectual property laws. You may not copy, modify, distribute, or reverse-engineer any part of the App.</p>
-
-        <h2>Changes to These Terms</h2>
-        <p>We reserve the right to modify these Terms of Use at any time. Continued use of the App after changes constitutes acceptance of the updated terms.</p>
-
-        <h2>Governing Law</h2>
-        <p>These Terms shall be governed by and construed in accordance with the laws of Switzerland, without regard to its conflict of law provisions.</p>
-
-        <h2>Contact Us</h2>
-        <p>If you have any questions about these Terms of Use, please contact us at <a href="mailto:support@klifter.com">support@klifter.com</a>.</p>
-
-        <div class="updated">Last updated: May 5, 2026</div>
+        <div class="updated" id="updated"></div>
     </div>
+
+    <script>
+        const translations = {
+            de: {
+                title: "Nutzungsbedingungen",
+                subtitle: "Spalyzer — Pool-Wasseranalyse",
+                updated: "Letzte Aktualisierung: 5. Mai 2026",
+                sections: [
+                    { h: "Annahme der Bedingungen", b: "<p>Durch Download, Installation oder Nutzung von Spalyzer („die App\") erklärst du dich mit diesen Nutzungsbedingungen einverstanden. Wenn du nicht einverstanden bist, nutze die App bitte nicht.</p>" },
+                    { h: "Beschreibung des Dienstes", b: "<p>Spalyzer ist eine mobile App, die Wasserchemie-Werte aus Fotos von Pool-Test-Reader-Displays, Teststreifen und Produkt-Etiketten ausliest und allgemeine Dosier-Empfehlungen für Schwimmbäder gibt. Die App wird von Klifter Apps („wir\", „uns\") betrieben.</p>" },
+                    { h: "Haftungsausschluss — keine professionelle Beratung", b: "<p>Die von Spalyzer bereitgestellten Wasserchemie-Informationen, Dosier-Vorschläge und Sicherheitshinweise dienen ausschließlich Informationszwecken. Sie stellen keine professionelle, medizinische, chemische oder sicherheitstechnische Beratung dar. Pool-Chemie ist sensibel und unsachgemäße Handhabung kann Schaden verursachen. Wir geben keine Garantie für die Genauigkeit erkannter Werte, Dosierungs-Berechnungen oder Sicherheits-Bewertungen.</p><p><strong>Lese und befolge immer die Hersteller-Anweisungen auf dem Produkt-Etikett jeder Chemikalie, die du verwendest. Im Zweifelsfall konsultiere eine qualifizierte Pool-Fachperson.</strong></p>" },
+                    { h: "Genauigkeit der Bilderkennung", b: "<p>Die App nutzt Computer Vision, um Werte aus Fotos zu lesen. Die Erkennungsgenauigkeit hängt von Lichtverhältnissen, Schärfe, Bildausschnitt und -qualität ab und ist nicht perfekt. Du bist dafür verantwortlich, jeden erkannten Wert vor dem Bestätigen einer Messung und vor dem Befolgen einer Dosier-Empfehlung zu prüfen. Die App lässt dich Werte immer vor dem Speichern überprüfen und korrigieren.</p>" },
+                    { h: "Nutzung auf eigene Gefahr", b: "<p>Du erkennst an:</p><ul><li>Pool-Chemikalien können gefährlich sein, wenn sie falsch gehandhabt, falsch gemischt oder in falschen Dosierungen verwendet werden.</li><li>Baden in Pool-Wasser mit Werten außerhalb sicherer Bereiche kann Schaden verursachen.</li><li>Du bist allein dafür verantwortlich sicherzustellen, dass dein Pool-Wasser sicher nutzbar ist.</li><li>Die App-Vorschläge sind allgemeine Richtlinien, die spezifische Pool-Bedingungen voraussetzen (Chlor-Desinfektion, optional Ozonator) und auf deine Situation möglicherweise nicht zutreffen.</li></ul>" },
+                    { h: "Haftungsbeschränkung", b: "<p>Im größtmöglichen gesetzlich zulässigen Umfang haftet Klifter Apps nicht für direkte, indirekte, zufällige, besondere, Folge- oder Strafschäden, die aus deiner Nutzung oder Unfähigkeit zur Nutzung der App entstehen, einschließlich aber nicht beschränkt auf:</p><ul><li>Falsche Erkennung von Wasserchemie-Werten</li><li>Falsche Dosier-Berechnungen oder -Empfehlungen</li><li>Schäden an deinem Pool, deiner Ausrüstung oder Umgebung</li><li>Verletzung oder Erkrankung durch unsachgemäß behandeltes Wasser</li><li>Verlust von Daten, die auf deinem Gerät gespeichert sind</li><li>Unterbrechung oder Nicht-Verfügbarkeit der App oder ihres Foto-Analyse-Backends</li></ul>" },
+                    { h: "Keine Gewährleistung", b: "<p>Die App wird „wie sie ist\" und „wie verfügbar\" ohne jegliche ausdrückliche oder stillschweigende Gewährleistung bereitgestellt, einschließlich aber nicht beschränkt auf stillschweigende Gewährleistungen der Marktgängigkeit, Eignung für einen bestimmten Zweck und Nicht-Verletzung. Wir gewährleisten nicht, dass die App unterbrechungsfrei oder fehlerfrei sein wird oder dass die Foto-Analyse immer erfolgreich ist.</p>" },
+                    { h: "Foto-Analyse & Rate-Limits", b: "<p>Die Foto-Analyse nutzt Drittanbieter-Dienste (OpenAI Vision über unser Supabase-Backend) und unterliegt einem täglichen Rate-Limit pro Gerät. Wir behalten uns das Recht vor, das Rate-Limit zu ändern, den zugrundeliegenden Anbieter zu wechseln oder die Foto-Analyse vorübergehend ohne Vorankündigung auszusetzen. Manuelle Werteingabe bleibt unabhängig davon verfügbar.</p>" },
+                    { h: "Geistiges Eigentum", b: "<p>Alle Inhalte, das Design und der Code in Spalyzer sind Eigentum von Klifter Apps und durch geltendes Urheberrecht geschützt. Du darfst keinen Teil der App kopieren, modifizieren, verteilen oder reverse-engineeren.</p>" },
+                    { h: "Änderungen dieser Bedingungen", b: "<p>Wir behalten uns vor, diese Nutzungsbedingungen jederzeit zu ändern. Die fortgesetzte Nutzung der App nach Änderungen stellt die Annahme der aktualisierten Bedingungen dar.</p>" },
+                    { h: "Anwendbares Recht", b: "<p>Diese Bedingungen unterliegen dem Recht der Schweiz unter Ausschluss der Bestimmungen des internationalen Privatrechts.</p>" },
+                    { h: "Kontakt", b: "<p>Bei Fragen zu diesen Nutzungsbedingungen kontaktiere uns unter <a href=\"mailto:support@klifter.com\">support@klifter.com</a>.</p>" }
+                ]
+            },
+            en: {
+                title: "Terms of Use",
+                subtitle: "Spalyzer — Pool Water Analysis",
+                updated: "Last updated: May 5, 2026",
+                sections: [
+                    { h: "Acceptance of Terms", b: "<p>By downloading, installing, or using Spalyzer (\"the App\"), you agree to be bound by these Terms of Use. If you do not agree, please do not use the App.</p>" },
+                    { h: "Description of Service", b: "<p>Spalyzer is a mobile application that reads water chemistry values from photos of pool test reader displays, test strips, and product labels, and provides general dosing guidance for swimming pools. The App is provided by Klifter Apps (\"we\", \"us\", or \"our\").</p>" },
+                    { h: "Disclaimer — No Professional Advice", b: "<p>The water chemistry information, dosing suggestions, and safety warnings provided by Spalyzer are for informational purposes only. They do not constitute professional, medical, chemical, or safety advice. Pool chemistry is sensitive and improper handling of chemicals can cause harm. We make no guarantees regarding the accuracy of recognized values, dosing calculations, or safety assessments.</p><p><strong>Always read and follow the manufacturer's instructions on the product label of any chemical you use. When in doubt, consult a qualified pool maintenance professional.</strong></p>" },
+                    { h: "Image Recognition Accuracy", b: "<p>The App uses computer vision to read values from photographs. Recognition accuracy depends on lighting, focus, framing, and image quality, and is not perfect. You are responsible for verifying every recognized value before confirming a measurement and acting on any dosing recommendation. The App always lets you review and correct values before saving.</p>" },
+                    { h: "Use at Your Own Risk", b: "<p>You acknowledge that:</p><ul><li>Pool chemicals can be dangerous if mishandled, mixed incorrectly, or used in incorrect dosages.</li><li>Bathing in pool water with values outside safe ranges can cause harm.</li><li>You are solely responsible for ensuring your pool water is safe for use.</li><li>The App's suggestions are general guidelines that assume specific pool conditions (chlorine disinfection, optionally an ozonator) and may not apply to your situation.</li></ul>" },
+                    { h: "Limitation of Liability", b: "<p>To the fullest extent permitted by applicable law, Klifter Apps shall not be liable for any direct, indirect, incidental, special, consequential, or punitive damages arising from your use of or inability to use the App, including but not limited to:</p><ul><li>Incorrect recognition of water chemistry values</li><li>Incorrect dosing calculations or recommendations</li><li>Damage to your pool, equipment, or surroundings</li><li>Injury or illness resulting from improperly treated water</li><li>Loss of data stored on your device</li><li>Interruption or unavailability of the App or its photo analysis backend</li></ul>" },
+                    { h: "No Warranty", b: "<p>The App is provided \"as is\" and \"as available\" without warranties of any kind, whether express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement. We do not warrant that the App will be uninterrupted, error-free, or that its photo analysis will always succeed.</p>" },
+                    { h: "Photo Analysis & Rate Limits", b: "<p>Photo analysis uses third-party services (OpenAI Vision, via our Supabase backend) and is subject to a per-device daily rate limit. We reserve the right to change the rate limit, change the underlying provider, or temporarily suspend the photo analysis feature without notice. Manual entry of values remains available regardless.</p>" },
+                    { h: "Intellectual Property", b: "<p>All content, design, and code in Spalyzer are the property of Klifter Apps and are protected by applicable intellectual property laws. You may not copy, modify, distribute, or reverse-engineer any part of the App.</p>" },
+                    { h: "Changes to These Terms", b: "<p>We reserve the right to modify these Terms of Use at any time. Continued use of the App after changes constitutes acceptance of the updated terms.</p>" },
+                    { h: "Governing Law", b: "<p>These Terms shall be governed by and construed in accordance with the laws of Switzerland, without regard to its conflict of law provisions.</p>" },
+                    { h: "Contact Us", b: "<p>If you have any questions about these Terms of Use, please contact us at <a href=\"mailto:support@klifter.com\">support@klifter.com</a>.</p>" }
+                ]
+            },
+            es: {
+                title: "Condiciones de Uso",
+                subtitle: "Spalyzer — Análisis del agua de la piscina",
+                updated: "Última actualización: 5 de mayo de 2026",
+                sections: [
+                    { h: "Aceptación de las condiciones", b: "<p>Al descargar, instalar o usar Spalyzer («la App»), aceptas estar sujeto a estas Condiciones de Uso. Si no estás de acuerdo, no uses la App.</p>" },
+                    { h: "Descripción del servicio", b: "<p>Spalyzer es una aplicación móvil que lee los valores de química del agua a partir de fotos de displays de lectores, tiras reactivas y etiquetas de productos, y ofrece orientación general de dosificación para piscinas. La App es proporcionada por Klifter Apps («nosotros»).</p>" },
+                    { h: "Aviso — Ningún consejo profesional", b: "<p>La información sobre química del agua, las sugerencias de dosificación y las advertencias de seguridad proporcionadas por Spalyzer son únicamente con fines informativos. No constituyen asesoramiento profesional, médico, químico o de seguridad. La química de piscina es sensible y la manipulación inadecuada de productos químicos puede causar daños. No garantizamos la exactitud de los valores reconocidos, los cálculos de dosificación o las evaluaciones de seguridad.</p><p><strong>Lee y sigue siempre las instrucciones del fabricante en la etiqueta del producto de cualquier químico que uses. En caso de duda, consulta a un profesional cualificado de mantenimiento de piscinas.</strong></p>" },
+                    { h: "Precisión del reconocimiento de imagen", b: "<p>La App usa visión por computadora para leer valores de las fotos. La precisión del reconocimiento depende de la iluminación, el enfoque, el encuadre y la calidad de la imagen, y no es perfecta. Eres responsable de verificar cada valor reconocido antes de confirmar una medición y de actuar sobre cualquier recomendación de dosificación. La App siempre te permite revisar y corregir los valores antes de guardar.</p>" },
+                    { h: "Uso bajo tu propio riesgo", b: "<p>Reconoces que:</p><ul><li>Los productos químicos para piscinas pueden ser peligrosos si se manejan mal, se mezclan incorrectamente o se usan en dosis incorrectas.</li><li>Bañarse en agua con valores fuera de los rangos seguros puede causar daño.</li><li>Eres el único responsable de asegurar que el agua de tu piscina sea segura para el uso.</li><li>Las sugerencias de la App son pautas generales que asumen condiciones específicas (desinfección por cloro, opcionalmente ozonador) y pueden no aplicar a tu situación.</li></ul>" },
+                    { h: "Limitación de responsabilidad", b: "<p>En la máxima medida permitida por la ley aplicable, Klifter Apps no será responsable de ningún daño directo, indirecto, incidental, especial, consecuente o punitivo que surja de tu uso o incapacidad de uso de la App, incluyendo pero no limitado a:</p><ul><li>Reconocimiento incorrecto de valores de química del agua</li><li>Cálculos o recomendaciones de dosificación incorrectos</li><li>Daños a tu piscina, equipo o entorno</li><li>Lesiones o enfermedades por agua tratada incorrectamente</li><li>Pérdida de datos almacenados en tu dispositivo</li><li>Interrupción o no disponibilidad de la App o de su backend de análisis</li></ul>" },
+                    { h: "Sin garantía", b: "<p>La App se proporciona «tal cual» y «según disponibilidad» sin garantías de ningún tipo, ya sean expresas o implícitas, incluyendo pero no limitado a garantías implícitas de comerciabilidad, idoneidad para un propósito particular y no infracción. No garantizamos que la App esté libre de interrupciones, libre de errores o que el análisis de fotos siempre tenga éxito.</p>" },
+                    { h: "Análisis de fotos y límites de tasa", b: "<p>El análisis de fotos usa servicios de terceros (OpenAI Vision, vía nuestro backend Supabase) y está sujeto a un límite diario por dispositivo. Nos reservamos el derecho de cambiar el límite, cambiar el proveedor subyacente o suspender temporalmente la función de análisis sin previo aviso. La introducción manual permanece disponible.</p>" },
+                    { h: "Propiedad intelectual", b: "<p>Todo el contenido, diseño y código de Spalyzer son propiedad de Klifter Apps y están protegidos por las leyes de propiedad intelectual aplicables. No puedes copiar, modificar, distribuir ni hacer ingeniería inversa de ninguna parte de la App.</p>" },
+                    { h: "Cambios en estas condiciones", b: "<p>Nos reservamos el derecho de modificar estas Condiciones de Uso en cualquier momento. El uso continuado de la App después de los cambios constituye la aceptación de las condiciones actualizadas.</p>" },
+                    { h: "Ley aplicable", b: "<p>Estas Condiciones se regirán e interpretarán de acuerdo con las leyes de Suiza, sin considerar sus disposiciones de conflicto de leyes.</p>" },
+                    { h: "Contacto", b: "<p>Si tienes preguntas sobre estas Condiciones de Uso, contáctanos en <a href=\"mailto:support@klifter.com\">support@klifter.com</a>.</p>" }
+                ]
+            },
+            fr: {
+                title: "Conditions d'utilisation",
+                subtitle: "Spalyzer — Analyse de l'eau de piscine",
+                updated: "Dernière mise à jour : 5 mai 2026",
+                sections: [
+                    { h: "Acceptation des conditions", b: "<p>En téléchargeant, installant ou utilisant Spalyzer (« l'App »), tu acceptes d'être lié par ces Conditions d'utilisation. Si tu n'es pas d'accord, n'utilise pas l'App.</p>" },
+                    { h: "Description du service", b: "<p>Spalyzer est une application mobile qui lit les valeurs de chimie de l'eau à partir de photos d'écrans de lecteurs, de bandelettes et d'étiquettes de produits, et fournit une orientation générale de dosage pour les piscines. L'App est fournie par Klifter Apps (« nous »).</p>" },
+                    { h: "Avertissement — Aucun conseil professionnel", b: "<p>Les informations sur la chimie de l'eau, les suggestions de dosage et les avertissements de sécurité fournis par Spalyzer sont à titre informatif uniquement. Ils ne constituent pas un conseil professionnel, médical, chimique ou de sécurité. La chimie de piscine est sensible et la manipulation inappropriée de produits chimiques peut causer des dommages. Nous ne donnons aucune garantie quant à l'exactitude des valeurs reconnues, des calculs de dosage ou des évaluations de sécurité.</p><p><strong>Lis et suis toujours les instructions du fabricant sur l'étiquette du produit de tout produit chimique que tu utilises. En cas de doute, consulte un professionnel qualifié d'entretien de piscine.</strong></p>" },
+                    { h: "Précision de la reconnaissance d'image", b: "<p>L'App utilise la vision par ordinateur pour lire les valeurs des photos. La précision de la reconnaissance dépend de l'éclairage, de la mise au point, du cadrage et de la qualité de l'image, et n'est pas parfaite. Tu es responsable de vérifier chaque valeur reconnue avant de confirmer une mesure et d'agir sur toute recommandation de dosage. L'App te permet toujours de réviser et de corriger les valeurs avant de sauvegarder.</p>" },
+                    { h: "Utilisation à tes risques", b: "<p>Tu reconnais que :</p><ul><li>Les produits chimiques pour piscine peuvent être dangereux s'ils sont mal manipulés, mal mélangés ou utilisés dans des dosages incorrects.</li><li>Se baigner dans une eau avec des valeurs hors plages sûres peut causer du tort.</li><li>Tu es seul responsable de t'assurer que l'eau de ta piscine est sûre.</li><li>Les suggestions de l'App sont des lignes directrices générales qui supposent des conditions spécifiques (désinfection au chlore, optionnellement un ozonateur) et peuvent ne pas s'appliquer à ta situation.</li></ul>" },
+                    { h: "Limitation de responsabilité", b: "<p>Dans la mesure maximale permise par la loi applicable, Klifter Apps ne sera pas responsable des dommages directs, indirects, accessoires, spéciaux, consécutifs ou punitifs découlant de ton utilisation ou de ton incapacité d'utiliser l'App, y compris mais sans s'y limiter :</p><ul><li>Reconnaissance incorrecte des valeurs de chimie de l'eau</li><li>Calculs ou recommandations de dosage incorrects</li><li>Dommages à ta piscine, équipement ou environnement</li><li>Blessure ou maladie résultant d'eau mal traitée</li><li>Perte de données stockées sur ton appareil</li><li>Interruption ou indisponibilité de l'App ou de son backend d'analyse</li></ul>" },
+                    { h: "Aucune garantie", b: "<p>L'App est fournie « telle quelle » et « selon disponibilité » sans garanties d'aucune sorte, qu'elles soient expresses ou implicites, y compris mais sans s'y limiter aux garanties implicites de qualité marchande, d'aptitude à un usage particulier et de non-contrefaçon. Nous ne garantissons pas que l'App sera ininterrompue, sans erreur, ou que son analyse photo réussira toujours.</p>" },
+                    { h: "Analyse photo et limites de débit", b: "<p>L'analyse photo utilise des services tiers (OpenAI Vision, via notre backend Supabase) et est soumise à une limite quotidienne par appareil. Nous nous réservons le droit de modifier la limite, de changer de fournisseur sous-jacent ou de suspendre temporairement la fonction d'analyse sans préavis. La saisie manuelle reste disponible.</p>" },
+                    { h: "Propriété intellectuelle", b: "<p>Tout le contenu, le design et le code de Spalyzer sont la propriété de Klifter Apps et sont protégés par les lois applicables sur la propriété intellectuelle. Tu ne peux pas copier, modifier, distribuer ou rétro-ingénierer aucune partie de l'App.</p>" },
+                    { h: "Modifications de ces conditions", b: "<p>Nous nous réservons le droit de modifier ces Conditions d'utilisation à tout moment. L'utilisation continue de l'App après modifications constitue l'acceptation des conditions mises à jour.</p>" },
+                    { h: "Droit applicable", b: "<p>Ces Conditions sont régies et interprétées conformément aux lois de la Suisse, sans considération de ses dispositions de conflit de lois.</p>" },
+                    { h: "Contact", b: "<p>Pour toute question concernant ces Conditions d'utilisation, contacte-nous à <a href=\"mailto:support@klifter.com\">support@klifter.com</a>.</p>" }
+                ]
+            },
+            it: {
+                title: "Condizioni d'uso",
+                subtitle: "Spalyzer — Analisi dell'acqua di piscina",
+                updated: "Ultimo aggiornamento: 5 maggio 2026",
+                sections: [
+                    { h: "Accettazione delle condizioni", b: "<p>Scaricando, installando o usando Spalyzer («l'App»), accetti di essere vincolato da queste Condizioni d'uso. Se non sei d'accordo, non usare l'App.</p>" },
+                    { h: "Descrizione del servizio", b: "<p>Spalyzer è un'applicazione mobile che legge i valori di chimica dell'acqua da foto di display di lettori, strisce reattive ed etichette di prodotti, e fornisce indicazioni generali di dosaggio per piscine. L'App è fornita da Klifter Apps («noi»).</p>" },
+                    { h: "Avvertenza — Nessuna consulenza professionale", b: "<p>Le informazioni sulla chimica dell'acqua, i suggerimenti di dosaggio e gli avvisi di sicurezza forniti da Spalyzer sono solo a scopo informativo. Non costituiscono consulenza professionale, medica, chimica o di sicurezza. La chimica della piscina è delicata e la manipolazione impropria dei prodotti chimici può causare danni. Non garantiamo l'accuratezza dei valori riconosciuti, dei calcoli di dosaggio o delle valutazioni di sicurezza.</p><p><strong>Leggi e segui sempre le istruzioni del produttore sull'etichetta del prodotto di qualsiasi prodotto chimico che usi. In caso di dubbio, consulta un professionista qualificato di manutenzione piscine.</strong></p>" },
+                    { h: "Accuratezza del riconoscimento immagini", b: "<p>L'App usa la computer vision per leggere i valori dalle foto. L'accuratezza del riconoscimento dipende da illuminazione, messa a fuoco, inquadratura e qualità dell'immagine e non è perfetta. Sei responsabile di verificare ogni valore riconosciuto prima di confermare una misurazione e di agire su qualsiasi raccomandazione di dosaggio. L'App ti permette sempre di rivedere e correggere i valori prima del salvataggio.</p>" },
+                    { h: "Uso a tuo rischio", b: "<p>Riconosci che:</p><ul><li>I prodotti chimici per piscine possono essere pericolosi se maneggiati male, mescolati in modo errato o usati in dosaggi errati.</li><li>Fare il bagno in acqua con valori fuori dagli intervalli sicuri può causare danni.</li><li>Sei l'unico responsabile di assicurare che l'acqua della tua piscina sia sicura per l'uso.</li><li>I suggerimenti dell'App sono linee guida generali che presumono condizioni specifiche (disinfezione al cloro, opzionalmente ozonatore) e possono non applicarsi alla tua situazione.</li></ul>" },
+                    { h: "Limitazione di responsabilità", b: "<p>Nella massima misura consentita dalla legge applicabile, Klifter Apps non sarà responsabile per danni diretti, indiretti, incidentali, speciali, consequenziali o punitivi derivanti dal tuo uso o impossibilità di usare l'App, inclusi ma non limitati a:</p><ul><li>Riconoscimento errato di valori di chimica dell'acqua</li><li>Calcoli o raccomandazioni di dosaggio errati</li><li>Danni alla tua piscina, attrezzatura o ambiente circostante</li><li>Lesioni o malattie derivanti da acqua trattata in modo improprio</li><li>Perdita di dati archiviati sul tuo dispositivo</li><li>Interruzione o indisponibilità dell'App o del suo backend di analisi</li></ul>" },
+                    { h: "Nessuna garanzia", b: "<p>L'App è fornita «così com'è» e «come disponibile» senza garanzie di alcun tipo, espresse o implicite, incluse ma non limitate alle garanzie implicite di commerciabilità, idoneità a uno scopo particolare e non violazione. Non garantiamo che l'App sarà ininterrotta, priva di errori o che la sua analisi foto avrà sempre successo.</p>" },
+                    { h: "Analisi foto e limiti di richieste", b: "<p>L'analisi delle foto usa servizi di terze parti (OpenAI Vision, tramite il nostro backend Supabase) ed è soggetta a un limite giornaliero per dispositivo. Ci riserviamo il diritto di modificare il limite, cambiare il fornitore sottostante o sospendere temporaneamente la funzione di analisi senza preavviso. L'inserimento manuale rimane disponibile.</p>" },
+                    { h: "Proprietà intellettuale", b: "<p>Tutti i contenuti, il design e il codice di Spalyzer sono di proprietà di Klifter Apps e sono protetti dalle leggi applicabili sulla proprietà intellettuale. Non puoi copiare, modificare, distribuire o decodificare alcuna parte dell'App.</p>" },
+                    { h: "Modifiche a queste condizioni", b: "<p>Ci riserviamo il diritto di modificare queste Condizioni d'uso in qualsiasi momento. L'uso continuato dell'App dopo le modifiche costituisce accettazione delle condizioni aggiornate.</p>" },
+                    { h: "Legge applicabile", b: "<p>Queste Condizioni sono regolate e interpretate secondo le leggi della Svizzera, senza riguardo alle sue disposizioni in materia di conflitto di leggi.</p>" },
+                    { h: "Contatti", b: "<p>Per domande su queste Condizioni d'uso, contattaci a <a href=\"mailto:support@klifter.com\">support@klifter.com</a>.</p>" }
+                ]
+            },
+            pt: {
+                title: "Termos de Uso",
+                subtitle: "Spalyzer — Análise da água da piscina",
+                updated: "Última atualização: 5 de maio de 2026",
+                sections: [
+                    { h: "Aceitação dos termos", b: "<p>Ao baixar, instalar ou usar o Spalyzer («o App»), você concorda em ficar vinculado a estes Termos de Uso. Se você não concorda, por favor não use o App.</p>" },
+                    { h: "Descrição do serviço", b: "<p>O Spalyzer é um aplicativo móvel que lê valores de química da água a partir de fotos de displays de leitores, fitas reagentes e rótulos de produtos, e fornece orientação geral de dosagem para piscinas. O App é fornecido pela Klifter Apps («nós»).</p>" },
+                    { h: "Aviso — Nenhum aconselhamento profissional", b: "<p>As informações sobre química da água, sugestões de dosagem e avisos de segurança fornecidos pelo Spalyzer são apenas para fins informativos. Não constituem aconselhamento profissional, médico, químico ou de segurança. A química da piscina é sensível e o manuseio inadequado de produtos químicos pode causar danos. Não fornecemos garantias quanto à precisão dos valores reconhecidos, cálculos de dosagem ou avaliações de segurança.</p><p><strong>Sempre leia e siga as instruções do fabricante no rótulo do produto de qualquer químico que você usar. Em caso de dúvida, consulte um profissional qualificado de manutenção de piscinas.</strong></p>" },
+                    { h: "Precisão do reconhecimento de imagem", b: "<p>O App usa visão computacional para ler valores das fotos. A precisão do reconhecimento depende da iluminação, foco, enquadramento e qualidade da imagem, e não é perfeita. Você é responsável por verificar cada valor reconhecido antes de confirmar uma medição e de agir sobre qualquer recomendação de dosagem. O App sempre permite revisar e corrigir valores antes de salvar.</p>" },
+                    { h: "Uso por sua conta e risco", b: "<p>Você reconhece que:</p><ul><li>Produtos químicos para piscina podem ser perigosos se manuseados, misturados ou dosados incorretamente.</li><li>Banhar-se em água com valores fora das faixas seguras pode causar danos.</li><li>Você é o único responsável por garantir que a água da sua piscina seja segura para uso.</li><li>As sugestões do App são diretrizes gerais que assumem condições específicas (desinfecção por cloro, opcionalmente ozonizador) e podem não se aplicar à sua situação.</li></ul>" },
+                    { h: "Limitação de responsabilidade", b: "<p>Na máxima extensão permitida pela lei aplicável, a Klifter Apps não será responsável por quaisquer danos diretos, indiretos, incidentais, especiais, consequenciais ou punitivos decorrentes do seu uso ou impossibilidade de usar o App, incluindo mas não limitado a:</p><ul><li>Reconhecimento incorreto de valores de química da água</li><li>Cálculos ou recomendações de dosagem incorretos</li><li>Danos à sua piscina, equipamento ou arredores</li><li>Lesões ou doenças resultantes de água tratada incorretamente</li><li>Perda de dados armazenados no seu dispositivo</li><li>Interrupção ou indisponibilidade do App ou do seu backend de análise</li></ul>" },
+                    { h: "Sem garantia", b: "<p>O App é fornecido «como está» e «conforme disponibilidade» sem garantias de qualquer tipo, sejam expressas ou implícitas, incluindo mas não limitado a garantias implícitas de comerciabilidade, adequação a um propósito específico e não violação. Não garantimos que o App será ininterrupto, livre de erros ou que sua análise de fotos sempre terá sucesso.</p>" },
+                    { h: "Análise de fotos e limites de uso", b: "<p>A análise de fotos usa serviços de terceiros (OpenAI Vision, via nosso backend Supabase) e está sujeita a um limite diário por dispositivo. Reservamo-nos o direito de alterar o limite, mudar o provedor subjacente ou suspender temporariamente o recurso de análise sem aviso. A entrada manual permanece disponível independentemente.</p>" },
+                    { h: "Propriedade intelectual", b: "<p>Todo o conteúdo, design e código do Spalyzer são propriedade da Klifter Apps e são protegidos pelas leis aplicáveis de propriedade intelectual. Você não pode copiar, modificar, distribuir ou fazer engenharia reversa de qualquer parte do App.</p>" },
+                    { h: "Alterações nestes termos", b: "<p>Reservamo-nos o direito de modificar estes Termos de Uso a qualquer momento. O uso continuado do App após mudanças constitui aceitação dos termos atualizados.</p>" },
+                    { h: "Lei aplicável", b: "<p>Estes Termos serão regidos e interpretados de acordo com as leis da Suíça, sem considerar suas disposições sobre conflitos de leis.</p>" },
+                    { h: "Contato", b: "<p>Para dúvidas sobre estes Termos de Uso, entre em contato em <a href=\"mailto:support@klifter.com\">support@klifter.com</a>.</p>" }
+                ]
+            }
+        };
+
+        const SUPPORTED = ["de", "en", "es", "fr", "it", "pt"];
+
+        function detectLang() {
+            try {
+                const stored = localStorage.getItem("spalyzer-lang");
+                if (stored && SUPPORTED.includes(stored)) return stored;
+            } catch (_) {}
+            const nav = (navigator.language || navigator.userLanguage || "en")
+                .slice(0, 2).toLowerCase();
+            return SUPPORTED.includes(nav) ? nav : "en";
+        }
+
+        function setLang(lang) {
+            const t = translations[lang] || translations.en;
+            document.documentElement.lang = lang;
+            document.title = t.title + " — Spalyzer";
+            document.getElementById("page-title").textContent = t.title;
+            document.getElementById("page-subtitle").textContent = t.subtitle;
+            document.getElementById("updated").textContent = t.updated;
+
+            const container = document.getElementById("sections");
+            container.innerHTML = "";
+            t.sections.forEach(s => {
+                const h2 = document.createElement("h2");
+                h2.textContent = s.h;
+                container.appendChild(h2);
+                const wrap = document.createElement("div");
+                wrap.innerHTML = s.b;
+                container.appendChild(wrap);
+            });
+
+            document.querySelectorAll("#lang-switcher button").forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.lang === lang);
+            });
+            try { localStorage.setItem("spalyzer-lang", lang); } catch (_) {}
+        }
+
+        document.querySelectorAll("#lang-switcher button").forEach(btn => {
+            btn.addEventListener("click", () => setLang(btn.dataset.lang));
+        });
+
+        setLang(detectLang());
+    </script>
 </body>
 </html>
