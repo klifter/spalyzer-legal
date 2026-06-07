@@ -13,6 +13,32 @@
       padding: 40px 20px;
     }
     .container { max-width: 680px; margin: 0 auto; }
+    .lang-switcher {
+      display: flex;
+      gap: 6px;
+      justify-content: flex-end;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .lang-switcher button {
+      background: white;
+      border: 1px solid #d2d2d7;
+      color: #1d1d1f;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 980px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .lang-switcher button.active {
+      background: #1d1d1f;
+      color: white;
+      border-color: #1d1d1f;
+    }
+    .lang-switcher button:hover:not(.active) {
+      background: #f5f5f7;
+    }
     header { text-align: center; margin-bottom: 48px; }
     header h1 { font-size: 36px; font-weight: 700; letter-spacing: -0.5px; }
     header h1 span { color: #3FB8E0; }
@@ -46,44 +72,244 @@
 </head>
 <body>
   <div class="container">
+    <div class="lang-switcher" id="lang-switcher">
+      <button data-lang="de">Deutsch</button>
+      <button data-lang="en">English</button>
+      <button data-lang="es">Español</button>
+      <button data-lang="fr">Français</button>
+      <button data-lang="it">Italiano</button>
+      <button data-lang="pt">Português</button>
+    </div>
+
     <header>
       <h1>Spa<span>lyzer</span></h1>
-      <p>Support &amp; Help</p>
+      <p data-i18n="subtitle"></p>
     </header>
 
     <div class="card">
-      <h2>Frequently Asked Questions</h2>
-      <ul>
-        <li><strong>How do I take a measurement?</strong> — From the home screen tap "New measurement", then choose between photographing the test reader's LCD, photographing a test strip, or entering values manually.</li>
-        <li><strong>The app doesn't recognize my values correctly.</strong> — Make sure the display or strip is well-lit, in focus, and fills the frame. Recognized values are always shown for review before saving — you can correct any value manually.</li>
-        <li><strong>How do I add a new pool chemical?</strong> — Settings → Manage products → Add. You can either photograph the label (vision-based recognition) or enter the data manually.</li>
-        <li><strong>How do I edit my pool setup?</strong> — Settings → Edit pool. Volume, indoor/outdoor, ozonator, default temperature, and unit system can all be changed at any time.</li>
-        <li><strong>I have multiple chlorine products. Which one is used for dosing?</strong> — On the products screen, mark one product per role (e.g. main chlorine, pH down) as your default. The dosing engine will use it.</li>
-        <li><strong>I get a "daily limit reached" error.</strong> — Photo analysis is rate-limited to 50 requests per device per day to prevent abuse. You can still enter values manually any time, or wait until the next day.</li>
-        <li><strong>Are the dosing recommendations safe?</strong> — Spalyzer uses safety limits and target ranges configured for outdoor swim spas with chlorine and an ozonator. The app shows warnings when measurements are outside safe ranges and never recommends doses that would exceed those limits. Always follow the manufacturer's instructions on your product label and consult a professional if values are critical.</li>
-        <li><strong>How do I change the language?</strong> — Settings → Language. Spalyzer is available in German, English, French, Spanish, Italian, and Portuguese (Brazil).</li>
-        <li><strong>How do I switch between metric and imperial units?</strong> — Settings → Edit pool → Units toggle.</li>
-        <li><strong>How do I delete all my data?</strong> — Uninstall the app — all data is local and is removed with the app.</li>
-      </ul>
+      <h2 data-i18n="faqHeading"></h2>
+      <ul id="faq-list"></ul>
     </div>
 
     <div class="card">
-      <h2>Contact Support</h2>
-      <p>If your question isn't answered above, you found a bug, or have a feature request — reach out via email. We typically respond within 1–2 business days.</p>
-      <a class="contact-btn" href="mailto:support@klifter.com?subject=Spalyzer%20Support">Email Support</a>
+      <h2 data-i18n="contactHeading"></h2>
+      <p data-i18n="contactBody"></p>
+      <a class="contact-btn" href="mailto:support@klifter.com?subject=Spalyzer%20Support" data-i18n="contactBtn"></a>
     </div>
 
     <div class="card">
-      <h2>Privacy &amp; Legal</h2>
+      <h2 data-i18n="legalHeading"></h2>
       <p>
-        <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
-        <a href="terms.html">Terms of Use</a>
+        <a href="privacy.html" data-i18n="legalPrivacy"></a> &nbsp;·&nbsp;
+        <a href="terms.html" data-i18n="legalTerms"></a>
       </p>
     </div>
 
     <footer>
-      <p>© 2026 Spalyzer · Klifter Apps · Dübendorf, Switzerland</p>
+      <p data-i18n="footer"></p>
     </footer>
   </div>
+
+  <script>
+    // Translations for all 6 supported app locales. Keys match the
+    // data-i18n attributes in the HTML above. Bucket keys are 2-char
+    // ISO codes (pt covers pt-BR — the only Portuguese variant the app
+    // supports anyway). FAQ entries are an array of [question, answer]
+    // tuples so the list can be rendered without per-language template
+    // duplication. Updating an entry = touching 6 strings, all in one
+    // file.
+    const translations = {
+      de: {
+        subtitle: "Support & Hilfe",
+        faqHeading: "Häufige Fragen",
+        contactHeading: "Support kontaktieren",
+        contactBody: "Wenn deine Frage oben nicht beantwortet ist, du einen Bug gefunden hast oder ein Feature wünschst — schreibe uns per E-Mail. Antwort üblicherweise innerhalb 1–2 Werktagen.",
+        contactBtn: "E-Mail an Support",
+        legalHeading: "Datenschutz & Rechtliches",
+        legalPrivacy: "Datenschutz-Erklärung",
+        legalTerms: "Nutzungsbedingungen",
+        footer: "© 2026 Spalyzer · Klifter Apps · Dübendorf, Schweiz",
+        faq: [
+          ["Wie messe ich Wasserwerte?", "Auf dem Home-Screen \"Messen\" tippen, dann zwischen LCD-Display fotografieren, Teststreifen fotografieren oder manuelle Eingabe wählen."],
+          ["Die App erkennt meine Werte nicht richtig.", "Stelle sicher dass Display oder Streifen gut beleuchtet, scharf und vollständig im Bild ist. Erkannte Werte werden vor dem Speichern immer zur Bestätigung gezeigt — du kannst jeden Wert manuell korrigieren."],
+          ["Wie füge ich eine neue Pool-Chemikalie hinzu?", "Einstellungen → Produkte verwalten → Hinzufügen. Du kannst entweder das Etikett fotografieren (Vision-basierte Erkennung) oder die Daten manuell eingeben."],
+          ["Wie ändere ich mein Pool-Setup?", "Einstellungen → Pool bearbeiten. Volumen, indoor/outdoor, Ozonator, Standard-Temperatur und Einheiten-System können jederzeit geändert werden."],
+          ["Ich habe mehrere Chlor-Produkte. Welches wird für die Dosierung verwendet?", "Auf dem Produkte-Screen markierst du pro Rolle (z.B. Hauptchlor, pH-Senker) ein Produkt als Standard. Die Dosier-Engine verwendet dann dieses."],
+          ["Ich bekomme eine \"Tageslimit erreicht\"-Fehlermeldung.", "Foto-Analyse ist auf 20 Anfragen pro Gerät pro Tag begrenzt, um Missbrauch zu vermeiden. Du kannst Werte jederzeit manuell eingeben oder bis zum nächsten Tag warten."],
+          ["Sind die Dosier-Empfehlungen sicher?", "Spalyzer verwendet Sicherheits-Limits und Ziel-Bereiche für gängige Pool- und Spa-Setups (mit oder ohne Ozonator). Die App zeigt Warnungen wenn Mess-Werte außerhalb sicherer Bereiche sind und empfiehlt niemals Dosen die diese Limits überschreiten würden. Folge immer den Hersteller-Anweisungen auf dem Produkt-Etikett und konsultiere bei kritischen Werten einen Profi."],
+          ["Wie ändere ich die Sprache?", "Einstellungen → Sprache. Spalyzer ist verfügbar in Deutsch, Englisch, Französisch, Spanisch, Italienisch und Portugiesisch (Brasilien)."],
+          ["Wie wechsle ich zwischen metrischen und imperialen Einheiten?", "Einstellungen → Pool bearbeiten → Einheiten-Schalter."],
+          ["Wie lösche ich alle meine Daten?", "App deinstallieren — alle Daten sind lokal und werden mit der App entfernt."]
+        ]
+      },
+      en: {
+        subtitle: "Support & Help",
+        faqHeading: "Frequently Asked Questions",
+        contactHeading: "Contact Support",
+        contactBody: "If your question isn't answered above, you found a bug, or have a feature request — reach out via email. We typically respond within 1–2 business days.",
+        contactBtn: "Email Support",
+        legalHeading: "Privacy & Legal",
+        legalPrivacy: "Privacy Policy",
+        legalTerms: "Terms of Use",
+        footer: "© 2026 Spalyzer · Klifter Apps · Dübendorf, Switzerland",
+        faq: [
+          ["How do I take a measurement?", "From the home screen tap \"New measurement\", then choose between photographing the test reader's LCD, photographing a test strip, or entering values manually."],
+          ["The app doesn't recognize my values correctly.", "Make sure the display or strip is well-lit, in focus, and fills the frame. Recognized values are always shown for review before saving — you can correct any value manually."],
+          ["How do I add a new pool chemical?", "Settings → Manage products → Add. You can either photograph the label (vision-based recognition) or enter the data manually."],
+          ["How do I edit my pool setup?", "Settings → Edit pool. Volume, indoor/outdoor, ozonator, default temperature, and unit system can all be changed at any time."],
+          ["I have multiple chlorine products. Which one is used for dosing?", "On the products screen, mark one product per role (e.g. main chlorine, pH down) as your default. The dosing engine will use it."],
+          ["I get a \"daily limit reached\" error.", "Photo analysis is rate-limited to 20 requests per device per day to prevent abuse. You can still enter values manually any time, or wait until the next day."],
+          ["Are the dosing recommendations safe?", "Spalyzer uses safety limits and target ranges suitable for common pool and spa setups (with or without ozonator). The app shows warnings when measurements are outside safe ranges and never recommends doses that would exceed those limits. Always follow the manufacturer's instructions on your product label and consult a professional if values are critical."],
+          ["How do I change the language?", "Settings → Language. Spalyzer is available in German, English, French, Spanish, Italian, and Portuguese (Brazil)."],
+          ["How do I switch between metric and imperial units?", "Settings → Edit pool → Units toggle."],
+          ["How do I delete all my data?", "Uninstall the app — all data is local and is removed with the app."]
+        ]
+      },
+      es: {
+        subtitle: "Soporte y ayuda",
+        faqHeading: "Preguntas frecuentes",
+        contactHeading: "Contactar con soporte",
+        contactBody: "Si tu pregunta no está respondida arriba, encontraste un error o quieres pedir una función — escríbenos por correo. Respondemos normalmente en 1–2 días laborables.",
+        contactBtn: "Enviar correo",
+        legalHeading: "Privacidad y aspectos legales",
+        legalPrivacy: "Política de privacidad",
+        legalTerms: "Condiciones de uso",
+        footer: "© 2026 Spalyzer · Klifter Apps · Dübendorf, Suiza",
+        faq: [
+          ["¿Cómo hago una medición?", "Desde la pantalla principal pulsa \"Nueva medición\" y elige entre fotografiar el LCD del lector, fotografiar una tira reactiva o introducir los valores manualmente."],
+          ["La app no reconoce bien mis valores.", "Asegúrate de que la pantalla o la tira esté bien iluminada, enfocada y llene el encuadre. Los valores reconocidos siempre se muestran para revisar antes de guardar — puedes corregir cualquier valor manualmente."],
+          ["¿Cómo añado un nuevo producto químico?", "Ajustes → Gestionar productos → Añadir. Puedes fotografiar la etiqueta (reconocimiento por visión) o introducir los datos manualmente."],
+          ["¿Cómo edito la configuración de mi piscina?", "Ajustes → Editar piscina. Volumen, interior/exterior, ozonador, temperatura por defecto y sistema de unidades se pueden cambiar en cualquier momento."],
+          ["Tengo varios productos de cloro. ¿Cuál se usa para la dosificación?", "En la pantalla de productos, marca un producto por rol (p. ej. cloro principal, reductor de pH) como predeterminado. El motor de dosificación lo usará."],
+          ["Recibo un error \"límite diario alcanzado\".", "El análisis por foto está limitado a 20 solicitudes por dispositivo y día para evitar abusos. Puedes introducir valores manualmente en cualquier momento o esperar al día siguiente."],
+          ["¿Son seguras las recomendaciones de dosificación?", "Spalyzer usa límites de seguridad y rangos objetivo apropiados para configuraciones comunes de piscinas y spas (con o sin ozonador). La app muestra avisos cuando las mediciones están fuera de los rangos seguros y nunca recomienda dosis que superen esos límites. Sigue siempre las instrucciones del fabricante en la etiqueta del producto y consulta a un profesional si los valores son críticos."],
+          ["¿Cómo cambio el idioma?", "Ajustes → Idioma. Spalyzer está disponible en alemán, inglés, francés, español, italiano y portugués (Brasil)."],
+          ["¿Cómo cambio entre unidades métricas e imperiales?", "Ajustes → Editar piscina → Interruptor de unidades."],
+          ["¿Cómo borro todos mis datos?", "Desinstala la app — todos los datos son locales y se eliminan con la app."]
+        ]
+      },
+      fr: {
+        subtitle: "Aide et support",
+        faqHeading: "Questions fréquentes",
+        contactHeading: "Contacter le support",
+        contactBody: "Si ta question n'est pas répondue ci-dessus, tu as trouvé un bug ou souhaites une nouvelle fonctionnalité — contacte-nous par e-mail. Nous répondons généralement sous 1–2 jours ouvrables.",
+        contactBtn: "Envoyer un e-mail",
+        legalHeading: "Confidentialité et mentions légales",
+        legalPrivacy: "Politique de confidentialité",
+        legalTerms: "Conditions d'utilisation",
+        footer: "© 2026 Spalyzer · Klifter Apps · Dübendorf, Suisse",
+        faq: [
+          ["Comment faire une mesure ?", "Depuis l'écran d'accueil, appuie sur \"Nouvelle mesure\" puis choisis entre photographier l'écran LCD du lecteur, photographier une bandelette ou saisir les valeurs manuellement."],
+          ["L'app ne reconnaît pas correctement mes valeurs.", "Assure-toi que l'écran ou la bandelette est bien éclairé, net et remplit le cadre. Les valeurs reconnues sont toujours affichées pour vérification avant l'enregistrement — tu peux corriger chaque valeur manuellement."],
+          ["Comment ajouter un nouveau produit chimique ?", "Réglages → Gérer les produits → Ajouter. Tu peux photographier l'étiquette (reconnaissance par vision) ou saisir les données manuellement."],
+          ["Comment modifier la configuration de ma piscine ?", "Réglages → Modifier la piscine. Volume, intérieur/extérieur, ozonateur, température par défaut et système d'unités peuvent être modifiés à tout moment."],
+          ["J'ai plusieurs produits de chlore. Lequel est utilisé pour le dosage ?", "Sur l'écran des produits, marque un produit par rôle (p. ex. chlore principal, pH-moins) comme par défaut. Le moteur de dosage l'utilisera."],
+          ["J'obtiens une erreur \"limite quotidienne atteinte\".", "L'analyse photo est limitée à 20 requêtes par appareil par jour pour éviter les abus. Tu peux saisir les valeurs manuellement à tout moment ou attendre le lendemain."],
+          ["Les recommandations de dosage sont-elles sûres ?", "Spalyzer utilise des limites de sécurité et des plages cibles adaptées aux configurations courantes de piscines et spas (avec ou sans ozonateur). L'app affiche des avertissements quand les mesures sont hors des plages sûres et ne recommande jamais des doses qui les dépasseraient. Suis toujours les instructions du fabricant sur l'étiquette et consulte un professionnel si les valeurs sont critiques."],
+          ["Comment changer la langue ?", "Réglages → Langue. Spalyzer est disponible en allemand, anglais, français, espagnol, italien et portugais (Brésil)."],
+          ["Comment basculer entre unités métriques et impériales ?", "Réglages → Modifier la piscine → Bascule des unités."],
+          ["Comment supprimer toutes mes données ?", "Désinstalle l'app — toutes les données sont locales et sont supprimées avec l'app."]
+        ]
+      },
+      it: {
+        subtitle: "Supporto e aiuto",
+        faqHeading: "Domande frequenti",
+        contactHeading: "Contattare l'assistenza",
+        contactBody: "Se la tua domanda non è risposta sopra, hai trovato un bug o vuoi richiedere una funzione — scrivici via email. Rispondiamo di solito entro 1–2 giorni lavorativi.",
+        contactBtn: "Email all'assistenza",
+        legalHeading: "Privacy e note legali",
+        legalPrivacy: "Informativa sulla privacy",
+        legalTerms: "Condizioni d'uso",
+        footer: "© 2026 Spalyzer · Klifter Apps · Dübendorf, Svizzera",
+        faq: [
+          ["Come effettuo una misurazione?", "Dalla schermata principale tocca \"Nuova misurazione\", poi scegli tra fotografare l'LCD del lettore, fotografare una striscia reattiva o inserire i valori manualmente."],
+          ["L'app non riconosce correttamente i miei valori.", "Assicurati che il display o la striscia siano ben illuminati, a fuoco e che riempiano l'inquadratura. I valori riconosciuti vengono sempre mostrati per revisione prima del salvataggio — puoi correggere ogni valore manualmente."],
+          ["Come aggiungo un nuovo prodotto chimico?", "Impostazioni → Gestisci prodotti → Aggiungi. Puoi fotografare l'etichetta (riconoscimento via visione) o inserire i dati manualmente."],
+          ["Come modifico la configurazione della piscina?", "Impostazioni → Modifica piscina. Volume, interno/esterno, ozonatore, temperatura predefinita e sistema di unità si possono cambiare in qualsiasi momento."],
+          ["Ho più prodotti a base di cloro. Quale viene usato per il dosaggio?", "Nella schermata prodotti, contrassegna un prodotto per ruolo (es. cloro principale, pH-meno) come predefinito. Il motore di dosaggio userà quello."],
+          ["Ricevo un errore \"limite giornaliero raggiunto\".", "L'analisi tramite foto è limitata a 20 richieste per dispositivo al giorno per prevenire abusi. Puoi sempre inserire i valori manualmente o aspettare il giorno seguente."],
+          ["I consigli di dosaggio sono sicuri?", "Spalyzer usa limiti di sicurezza e intervalli target adatti alle configurazioni comuni di piscine e spa (con o senza ozonatore). L'app mostra avvisi quando le misure sono fuori dagli intervalli sicuri e non consiglia mai dosi che li supererebbero. Segui sempre le istruzioni del produttore sull'etichetta e consulta un professionista se i valori sono critici."],
+          ["Come cambio la lingua?", "Impostazioni → Lingua. Spalyzer è disponibile in tedesco, inglese, francese, spagnolo, italiano e portoghese (Brasile)."],
+          ["Come passo tra unità metriche e imperiali?", "Impostazioni → Modifica piscina → Interruttore unità."],
+          ["Come elimino tutti i miei dati?", "Disinstalla l'app — tutti i dati sono locali e vengono rimossi con l'app."]
+        ]
+      },
+      pt: {
+        subtitle: "Suporte e ajuda",
+        faqHeading: "Perguntas frequentes",
+        contactHeading: "Contatar o suporte",
+        contactBody: "Se sua pergunta não foi respondida acima, você encontrou um bug ou tem uma sugestão de funcionalidade — entre em contato por e-mail. Geralmente respondemos em 1–2 dias úteis.",
+        contactBtn: "Enviar e-mail",
+        legalHeading: "Privacidade e aspectos legais",
+        legalPrivacy: "Política de privacidade",
+        legalTerms: "Termos de uso",
+        footer: "© 2026 Spalyzer · Klifter Apps · Dübendorf, Suíça",
+        faq: [
+          ["Como faço uma medição?", "Na tela inicial toque em \"Nova medição\" e escolha entre fotografar o LCD do leitor, fotografar uma fita reagente ou inserir os valores manualmente."],
+          ["O app não reconhece corretamente meus valores.", "Certifique-se de que o display ou a fita esteja bem iluminado, em foco e preencha o enquadramento. Os valores reconhecidos são sempre mostrados para revisão antes de salvar — você pode corrigir cada valor manualmente."],
+          ["Como adiciono um novo produto químico?", "Configurações → Gerenciar produtos → Adicionar. Você pode fotografar o rótulo (reconhecimento por visão) ou inserir os dados manualmente."],
+          ["Como edito a configuração da minha piscina?", "Configurações → Editar piscina. Volume, interno/externo, ozonizador, temperatura padrão e sistema de unidades podem ser alterados a qualquer momento."],
+          ["Tenho vários produtos de cloro. Qual é usado para a dosagem?", "Na tela de produtos, marque um produto por papel (ex. cloro principal, redutor de pH) como padrão. O motor de dosagem usará esse produto."],
+          ["Recebo um erro \"limite diário atingido\".", "A análise por foto é limitada a 20 solicitações por dispositivo por dia para evitar abuso. Você pode inserir valores manualmente a qualquer momento ou aguardar o próximo dia."],
+          ["As recomendações de dosagem são seguras?", "Spalyzer usa limites de segurança e faixas-alvo adequadas para configurações comuns de piscinas e spas (com ou sem ozonizador). O app mostra avisos quando as medições estão fora das faixas seguras e nunca recomenda doses que excederiam esses limites. Sempre siga as instruções do fabricante no rótulo do produto e consulte um profissional se os valores forem críticos."],
+          ["Como mudo o idioma?", "Configurações → Idioma. Spalyzer está disponível em alemão, inglês, francês, espanhol, italiano e português (Brasil)."],
+          ["Como alterno entre unidades métricas e imperiais?", "Configurações → Editar piscina → Botão de unidades."],
+          ["Como apago todos os meus dados?", "Desinstale o app — todos os dados são locais e são removidos junto com o app."]
+        ]
+      }
+    };
+
+    const SUPPORTED = ["de", "en", "es", "fr", "it", "pt"];
+
+    function detectLang() {
+      // Stored preference wins (user clicked a flag before).
+      try {
+        const stored = localStorage.getItem("spalyzer-lang");
+        if (stored && SUPPORTED.includes(stored)) return stored;
+      } catch (_) { /* private mode etc. */ }
+      // Otherwise: 2-char ISO from navigator.language (iOS WebView
+      // propagates device language as e.g. "de-CH", "pt-BR").
+      const nav = (navigator.language || navigator.userLanguage || "en")
+        .slice(0, 2)
+        .toLowerCase();
+      return SUPPORTED.includes(nav) ? nav : "en";
+    }
+
+    function setLang(lang) {
+      const t = translations[lang] || translations.en;
+      document.documentElement.lang = lang;
+      document.title = "Spalyzer — " + t.subtitle;
+
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (t[key]) el.textContent = t[key];
+      });
+
+      // FAQ list rendered from the array — keeps HTML clean and avoids
+      // 60 separate <li> elements per language.
+      const ul = document.getElementById("faq-list");
+      ul.innerHTML = "";
+      t.faq.forEach(([q, a]) => {
+        const li = document.createElement("li");
+        const strong = document.createElement("strong");
+        strong.textContent = q;
+        li.appendChild(strong);
+        li.appendChild(document.createTextNode(" — " + a));
+        ul.appendChild(li);
+      });
+
+      document.querySelectorAll("#lang-switcher button").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.lang === lang);
+      });
+
+      try { localStorage.setItem("spalyzer-lang", lang); } catch (_) {}
+    }
+
+    document.querySelectorAll("#lang-switcher button").forEach(btn => {
+      btn.addEventListener("click", () => setLang(btn.dataset.lang));
+    });
+
+    setLang(detectLang());
+  </script>
 </body>
 </html>
